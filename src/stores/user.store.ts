@@ -1,5 +1,7 @@
 import {proxyWithComputed} from "umi";
-import {login} from "@/services/api/auth";
+import {login, profile} from "@/services/api/auth";
+import {User} from "@/types/User";
+import {APIResponseType} from "@/types/APIResponseType";
 
 type UserStoreProps = {
     user:any,
@@ -9,7 +11,7 @@ type UserComputedProps = {
 
 }
 type Actions = {
-    profile:()=>Promise<void>
+    profile:()=>Promise<APIResponseType<User|null>>
     login:(params:{type:"password"|"verifyCode",way:string,value:string})=>Promise<void>
 }
 const initState:UserStoreProps = {
@@ -25,7 +27,11 @@ const action:Actions = {
         console.log("data",data)
     },
     profile:async ()=>{
-
+        const res = await profile()
+        if (res.data){
+            state.user = res.data
+        }
+        return res
     }
 }
 

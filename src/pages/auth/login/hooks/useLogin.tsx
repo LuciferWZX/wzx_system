@@ -37,6 +37,7 @@ const useLogin = () => {
             return
         }
         userStore.state.token = res.data.token
+        const res2 = await userStore.action.profile()
 
 
     }
