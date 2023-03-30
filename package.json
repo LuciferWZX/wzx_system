@@ -10,12 +10,13 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "ahooks": "^3.7.6",
     "antd": "^5.3.3",
     "dayjs": "^1.11.7",
-    "react-lottie": "^1.2.3",
+    "react-lottie-player": "^1.5.4",
     "storejs": "^2.0.2",
     "styled-components": "^5.3.9",
-    "umi": "^4.0.63",
+    "umi": "^4.0.64",
     "umi-request": "^1.4.0"
   },
   "devDependencies": {
@@ -24,7 +25,6 @@
     "@iconify-json/mdi": "1.1.50",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@types/react-lottie": "^1.2.6",
     "@types/styled-components": "^5.1.26",
     "@umijs/plugins": "^4.0.63",
     "typescript": "^5.0.0"

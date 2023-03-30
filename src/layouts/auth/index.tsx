@@ -1,6 +1,5 @@
 import React, {FC} from "react"
-import {Outlet} from "umi";
-import styled from "styled-components";
+import {Outlet,styled} from "umi";
 import {Col, Row,theme} from "antd";
 import LottieAnimation from "@/layouts/auth/LottieAnimation";
 
@@ -10,7 +9,7 @@ const AuthLayout:FC = () => {
     return(
             <StyledAuthLayout>
                 <Row className={'horizon-container'}  align="middle" >
-                    <Col flex={2} style={{flex:"2 2"}}>
+                    <Col className={"logo-container"} flex={2} style={{flex:"2 2"}}>
                         <LottieAnimation />
                     </Col>
                     <Col  flex={3} className={'page-container'} style={{backgroundColor:colorBgContainer,flex:"3 3"}}>
@@ -29,6 +28,12 @@ const StyledAuthLayout = styled.div`
   background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   .horizon-container{
     height: 100%;
+  }
+  .logo-container{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
   }
   .page-container{
     height: 100%;

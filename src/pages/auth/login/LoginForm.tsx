@@ -1,8 +1,10 @@
 import React, {FC} from "react";
-import styled from "styled-components";
 import {Button, Divider, Form, Input, Segmented, Space, Tooltip, Typography} from "antd";
-import { Icon } from 'umi';
+import { Icon,styled } from 'umi';
 import {AlipayCircleOutlined, GithubOutlined, GoogleOutlined, QqOutlined, WechatOutlined} from "@ant-design/icons";
+
+import useLogin from "@/pages/auth/login/hooks/useLogin";
+
 const {Text,Link}=Typography
 type LoginFormType={
     type:"password"|"verifyCode",
@@ -11,17 +13,21 @@ type LoginFormType={
 }
 const LoginForm:FC = () => {
     const [form] = Form.useForm<LoginFormType>()
-    const onFinish=(values:LoginFormType)=>{
-
+    const {run:runLogin,loading:loginLoading,contextHolder}=useLogin()
+    const onFinish=async (values:LoginFormType)=>{
+        await runLogin({type:values.type,value:values.value,way:values.way})
     }
+
     return(
         <StyledLoginForm>
+            {contextHolder}
             <Space direction={"vertical"} size={12} style={{width:"100%"}}>
                 <Text strong={true} className={'title'}>登录</Text>
                 <Text type={"secondary"} className={'desc'}>请填写您的信息</Text>
                 <Form
                     form={form}
                     onFinish={onFinish}
+                    disabled={loginLoading}
                     initialValues={{
                         type:"password",
                         way:"",
@@ -70,19 +76,19 @@ const LoginForm:FC = () => {
                 <Text>第三方登录</Text>
                 <Space>
                     <Tooltip destroyTooltipOnHide={true} title={"Github"}>
-                        <Button size={"large"} shape={"circle"} type={"text"} icon={<GithubOutlined />} />
+                        <Button disabled={loginLoading} size={"large"} shape={"circle"} type={"text"} icon={<GithubOutlined />} />
                     </Tooltip>
                     <Tooltip destroyTooltipOnHide={true} title={"微信"}>
-                        <Button size={"large"} shape={"circle"} type={"text"} icon={<WechatOutlined />} />
+                        <Button disabled={loginLoading} size={"large"} shape={"circle"} type={"text"} icon={<WechatOutlined />} />
                     </Tooltip>
                     <Tooltip destroyTooltipOnHide={true} title={"QQ"}>
-                        <Button size={"large"} shape={"circle"} type={"text"} icon={<QqOutlined />} />
+                        <Button disabled={loginLoading} size={"large"} shape={"circle"} type={"text"} icon={<QqOutlined />} />
                     </Tooltip>
                     <Tooltip destroyTooltipOnHide={true} title={"谷歌"}>
-                        <Button size={"large"} shape={"circle"} type={"text"} icon={<GoogleOutlined />} />
+                        <Button disabled={loginLoading} size={"large"} shape={"circle"} type={"text"} icon={<GoogleOutlined />} />
                     </Tooltip>
                     <Tooltip destroyTooltipOnHide={true} title={"支付宝"}>
-                        <Button size={"large"} shape={"circle"} type={"text"} icon={<AlipayCircleOutlined />} />
+                        <Button disabled={loginLoading} size={"large"} shape={"circle"} type={"text"} icon={<AlipayCircleOutlined />} />
                     </Tooltip>
 
                 </Space>

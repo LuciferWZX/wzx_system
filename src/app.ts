@@ -4,9 +4,8 @@ import zhCN from 'antd/locale/zh_CN';
 import dayjs from 'dayjs';
 import {StoreKey} from "@/types/StoreKey";
 import 'dayjs/locale/zh-cn';
-import { history } from "umi"
-import {createGlobalStyle} from "styled-components";
-
+import { history,createGlobalStyle } from "umi"
+import userState from "@/stores/user.store"
 export const getInitialState = async ()=>{
     console.log("[初始化数据：开始]")
     await initUser()
@@ -29,6 +28,7 @@ export const styledComponents = {
           margin: 0;
           padding: 0;
           height: 100%;
+          min-width: 600px;
         }
   `
 }
@@ -42,5 +42,7 @@ const initUser=async ()=>{
     if (!token){
         console.warn("[token不存在]:",token)
         history.replace("/auth/login")
+        return null
     }
+    //初始化用户的数据
 }

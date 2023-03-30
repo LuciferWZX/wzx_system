@@ -1,6 +1,6 @@
 import {FC} from "react";
 
-import styled from "styled-components";
+import {styled} from "umi";
 import LoginForm from "@/pages/auth/login/LoginForm";
 
 const LoginPage:FC = () => {

@@ -1,6 +1,5 @@
 import {FC} from "react";
-import { Outlet } from 'umi';
-import styled from "styled-components";
+import { Outlet,styled } from 'umi';
 
 const Layout:FC=()=> {
   return (

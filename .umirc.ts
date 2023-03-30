@@ -7,6 +7,7 @@ export default defineConfig({
   npmClient: 'pnpm',
   alias:{
     '@':'src',
+    'config':'config',
   },
   history:{
     type:"hash"
@@ -18,12 +19,15 @@ export default defineConfig({
     '@umijs/plugins/dist/model',
     '@umijs/plugins/dist/styled-components',
     '@umijs/plugins/dist/valtio',
+    '@umijs/plugins/dist/react-query',
     ],
   model:{},
   initialState: {},
   styledComponents:{},
   icons:{
     autoInstall: {},
+    include:["material-symbols:cancel-rounded"]
   },
   valtio:{},
+  reactQuery:{}
 });
