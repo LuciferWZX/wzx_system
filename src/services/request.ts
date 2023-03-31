@@ -25,6 +25,7 @@ const errorHandler=(err:ResponseError)=>{
 const request = extend({
     credentials:"omit",
     timeout:60000,
+    cache:"no-cache",
     errorHandler
 })
 request.interceptors.request.use((url, options) => {

@@ -26,7 +26,12 @@ export default defineConfig({
   styledComponents:{},
   icons:{
     autoInstall: {},
-    include:["material-symbols:cancel-rounded"]
+    include:[
+        "material-symbols:cancel-rounded",
+      "ic:round-keyboard-arrow-down",
+      "material-symbols:settings-suggest-outline-rounded",
+        "ci:log-out"
+    ]
   },
   valtio:{},
   reactQuery:{}

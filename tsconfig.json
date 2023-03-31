@@ -1,6 +1,6 @@
 {
   "extends": "./src/.umi/tsconfig.json",
     "compilerOptions": {
-        "strict": false
+      "strict": false
     }
 }

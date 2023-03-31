@@ -1,10 +1,12 @@
-import {proxyWithComputed} from "umi";
+import {proxyWithComputed,subscribeKey} from "umi";
 import {login, profile} from "@/services/api/auth";
 import {User} from "@/types/User";
 import {APIResponseType} from "@/types/APIResponseType";
+import store from "storejs"
+import {StoreKey} from "@/types/StoreKey";
 
 type UserStoreProps = {
-    user:any,
+    user:User,
     token:string
 }
 type UserComputedProps = {
@@ -16,7 +18,7 @@ type Actions = {
 }
 const initState:UserStoreProps = {
     user:null,
-    token:""
+    token:"",
 }
 const state:UserStoreProps & UserComputedProps=proxyWithComputed<UserStoreProps,UserComputedProps>(initState,{
 
@@ -34,6 +36,16 @@ const action:Actions = {
         return res
     }
 }
+/**
+ * 订阅token
+ */
+subscribeKey(state,"token",(token:string)=>{
+    if (token){
+        store.set(StoreKey.Auth,token)
+        return
+    }
+    store.remove(StoreKey.Auth)
+})
 
 export default {
     state,
