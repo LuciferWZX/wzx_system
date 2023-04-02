@@ -1,4 +1,4 @@
-import {styled,useSnapshot,Icon} from "umi";
+import {styled,useSnapshot,Icon,history} from "umi";
 import {Avatar, Typography, Layout, Space, theme, Dropdown, MenuProps} from "antd";
 import userStore from "@/stores/user.store";
 import {FC} from "react";
@@ -9,6 +9,10 @@ const {Text}=Typography
 const Header:FC = () => {
     const {token:{colorBgContainer}}=useToken()
     const {avatar,nickname}=useSnapshot(userStore.state).user as User
+
+    const switchUser=()=>{
+        history.push("/auth/login")
+    }
     const items: MenuProps['items'] = [
         {
             key:"setting",
@@ -19,6 +23,7 @@ const Header:FC = () => {
         {
             key:"switch",
             label:"切换用户",
+            onClick:switchUser,
             icon:<UserSwitchOutlined />
         },
         {
@@ -33,11 +38,13 @@ const Header:FC = () => {
     ]
     return(
         <StyledHeader style={{backgroundColor:colorBgContainer}}>
-            <Dropdown destroyPopupOnHide={true} menu={{ items }}>
-                <AvatarBox align="center">
-                    <Avatar shape={"square"} size={40} src={avatar}/>
-                    <Text className={"nickname"} strong={true}>{nickname}</Text>
-                    <Icon icon={"ic:round-keyboard-arrow-down"} className={"anticon done-icon"} />
+            <Dropdown trigger={["click"]} destroyPopupOnHide={true} menu={{ items }}>
+                <AvatarBox >
+                    <Space>
+                        <Avatar shape={"square"} size={40} src={avatar}/>
+                        <Text className={"nickname"} strong={true}>{nickname}</Text>
+                        <Icon icon={"ic:round-keyboard-arrow-down"} className={"anticon done-icon"} />
+                    </Space>
                 </AvatarBox>
             </Dropdown>
         </StyledHeader>
@@ -50,7 +57,7 @@ const StyledHeader = styled(Layout.Header)`
   display: inline-flex;
   align-items: center;
 `
-const AvatarBox = styled(Space)`
+const AvatarBox = styled.div`
   height: 57px;
   background-color:transparent ;
   border: 1px solid transparent;
@@ -59,6 +66,8 @@ const AvatarBox = styled(Space)`
   cursor: pointer;
   transition-property: background-color;
   transition-duration: 0.2s;
+  display: flex;
+  align-content: center;
   &:hover{
     background-color:#F5F5F7 ;
     border: 1px solid #F5F5F7;

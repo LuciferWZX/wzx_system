@@ -46,6 +46,23 @@ subscribeKey(state,"token",(token:string)=>{
     }
     store.remove(StoreKey.Auth)
 })
+/**
+ * 订阅user字段
+ */
+subscribeKey(state,"user",(user:User|null)=>{
+    if (user){
+        const mapJsonStr = store.get(StoreKey.Accounts)
+        let accounts:Map<number,{id:number,avatar:string,nickname:string}>
+        if (mapJsonStr) {
+            accounts = new Map(JSON.parse(mapJsonStr))
+        }else{
+            accounts = new Map()
+        }
+        accounts.set(user.id,{id:user.id,avatar:user.avatar,nickname:user.nickname})
+        store.set(StoreKey.Accounts,JSON.stringify([...accounts]))
+        return
+    }
+})
 
 export default {
     state,

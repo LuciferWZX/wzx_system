@@ -106,7 +106,7 @@ const StyledLoginForm = styled.div`
     .title{
       font-size:28px;
       line-height: 42px;
-    }
+    } 
   .desc{
     font-weight: 500;
     font-size: 16px;

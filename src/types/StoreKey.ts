@@ -1,3 +1,4 @@
 export enum StoreKey {
-    Auth="authority"
+    Auth="authority",
+    Accounts="accounts"
 }
