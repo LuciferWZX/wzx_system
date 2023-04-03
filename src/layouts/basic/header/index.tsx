@@ -11,7 +11,7 @@ const Header:FC = () => {
     const {avatar,nickname}=useSnapshot(userStore.state).user as User
 
     const switchUser=()=>{
-        history.push("/auth/login")
+        history.push("/auth/accounts")
     }
     const items: MenuProps['items'] = [
         {

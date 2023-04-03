@@ -5,7 +5,11 @@ const routes:any[]=[
         path: '/auth',
         component: '@/layouts/auth',
         routes: [
-            { path: '/auth',redirect:'/auth/login'},
+            { path: '/auth',redirect:'/auth/accounts'},
+            {
+                path: '/auth/accounts',//账户列表
+                component: 'auth/accounts' ,
+            },
             {
                 path: '/auth/login',//登录
                 component: 'auth/login' ,

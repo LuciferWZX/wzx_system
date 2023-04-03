@@ -4,6 +4,7 @@ import {User} from "@/types/User";
 import {APIResponseType} from "@/types/APIResponseType";
 import store from "storejs"
 import {StoreKey} from "@/types/StoreKey";
+import {delay} from "@/utils/delay";
 
 type UserStoreProps = {
     user:User,
@@ -14,6 +15,7 @@ type UserComputedProps = {
 }
 type Actions = {
     profile:()=>Promise<APIResponseType<User|null>>
+    switchProfile:(token:string)=>Promise<APIResponseType<User|null>>
     login:(params:{type:"password"|"verifyCode",way:string,value:string})=>Promise<void>
 }
 const initState:UserStoreProps = {
@@ -30,6 +32,14 @@ const action:Actions = {
     },
     profile:async ()=>{
         const res = await profile()
+        if (res.data){
+            state.user = res.data
+        }
+        return res
+    },
+    switchProfile:async (token:string)=>{
+        await delay(1000)
+        const res = await profile(token)
         if (res.data){
             state.user = res.data
         }
@@ -52,15 +62,18 @@ subscribeKey(state,"token",(token:string)=>{
 subscribeKey(state,"user",(user:User|null)=>{
     if (user){
         const mapJsonStr = store.get(StoreKey.Accounts)
-        let accounts:Map<number,{id:number,avatar:string,nickname:string}>
+        let accounts:Map<number,{id:number,avatar:string,nickname:string,token:string}>
         if (mapJsonStr) {
             accounts = new Map(JSON.parse(mapJsonStr))
         }else{
             accounts = new Map()
         }
-        accounts.set(user.id,{id:user.id,avatar:user.avatar,nickname:user.nickname})
+        accounts.set(user.id,{id:user.id,avatar:user.avatar,nickname:user.nickname,token:state.token})
         store.set(StoreKey.Accounts,JSON.stringify([...accounts]))
+        store.set(StoreKey.CurrentUserId,user.id)
         return
+    }else{
+        store.remove(StoreKey.CurrentUserId)
     }
 })
 

@@ -30,7 +30,9 @@ export default defineConfig({
         "material-symbols:cancel-rounded",
       "ic:round-keyboard-arrow-down",
       "material-symbols:settings-suggest-outline-rounded",
-        "ci:log-out"
+        "ci:log-out",
+        "ion:md-arrow-round-back",
+        "clarity:switch-line"
     ]
   },
   valtio:{},

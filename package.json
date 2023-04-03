@@ -31,6 +31,8 @@
     "typescript": "^5.0.0",
     "@iconify-json/ic": "1.1.13",
     "@iconify-json/ant-design": "1.1.5",
-    "@iconify-json/ci": "1.1.9"
+    "@iconify-json/ci": "1.1.9",
+    "@iconify-json/ion": "1.1.9",
+    "@iconify-json/clarity": "1.1.8"
   }
 }

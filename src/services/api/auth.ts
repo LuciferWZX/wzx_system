@@ -9,8 +9,16 @@ export const login = async (params:{type:"password"|"verifyCode",way:string,valu
         data:params
     })
 }
-export const profile = async ():Promise<APIResponseType<User>> =>{
+export const profile = async (token?:string):Promise<APIResponseType<User>> =>{
     const url = `/api/v1/auth/profile`
+    if (token){
+        return request(url,{
+            method:"GET",
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        })
+    }
     return request(url,{
         method:"GET",
     })

@@ -5,7 +5,9 @@ specifiers:
   '@iconify-json/ant-design': 1.1.5
   '@iconify-json/carbon': 1.1.16
   '@iconify-json/ci': 1.1.9
+  '@iconify-json/clarity': 1.1.8
   '@iconify-json/ic': 1.1.13
+  '@iconify-json/ion': 1.1.9
   '@iconify-json/material-symbols': 1.1.36
   '@iconify-json/mdi': 1.1.50
   '@types/react': ^18.0.0
@@ -39,7 +41,9 @@ devDependencies:
   '@iconify-json/ant-design': 1.1.5
   '@iconify-json/carbon': 1.1.16
   '@iconify-json/ci': 1.1.9
+  '@iconify-json/clarity': 1.1.8
   '@iconify-json/ic': 1.1.13
+  '@iconify-json/ion': 1.1.9
   '@iconify-json/material-symbols': 1.1.36
   '@iconify-json/mdi': 1.1.50
   '@types/react': 18.0.31
@@ -2576,8 +2580,20 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
+  /@iconify-json/clarity/1.1.8:
+    resolution: {integrity: sha512-Pf8Y1I5aVN3w56LamWpk17YQ7Gh2NICJYqiVc6A4sU9UmPpJDOAhpd6mVSCeptNv058PROyPoM1KoDFDn7eNKA==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
   /@iconify-json/ic/1.1.13:
     resolution: {integrity: sha512-5i5zal/VRwTrs99iMTnG1Zu97bgX9Mkiu9TzR1U1rHBylUnBW+HkOweoQVEPgQITGG024/lNbZxU+3Aa2xuDww==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/ion/1.1.9:
+    resolution: {integrity: sha512-0LCnmt2DOV9XkKEnDhfOxU2ejZfrNLErczdJ6ONQvqpXoh9yeZIsPa2YILdF6cMuxCRqxVuU8BAdpUrNy+j1ng==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
