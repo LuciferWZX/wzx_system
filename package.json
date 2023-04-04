@@ -13,6 +13,7 @@
     "ahooks": "^3.7.6",
     "antd": "^5.3.3",
     "dayjs": "^1.11.7",
+    "framer-motion": "^10.10.0",
     "react-lottie-player": "^1.5.4",
     "storejs": "^2.0.2",
     "styled-components": "^5.3.9",
@@ -21,18 +22,18 @@
     "valtio": "^1.10.3"
   },
   "devDependencies": {
+    "@iconify-json/ant-design": "1.1.5",
     "@iconify-json/carbon": "1.1.16",
+    "@iconify-json/ci": "1.1.9",
+    "@iconify-json/clarity": "1.1.8",
+    "@iconify-json/ic": "1.1.13",
+    "@iconify-json/ion": "1.1.9",
     "@iconify-json/material-symbols": "1.1.36",
     "@iconify-json/mdi": "1.1.50",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@umijs/plugins": "^4.0.63",
-    "typescript": "^5.0.0",
-    "@iconify-json/ic": "1.1.13",
-    "@iconify-json/ant-design": "1.1.5",
-    "@iconify-json/ci": "1.1.9",
-    "@iconify-json/ion": "1.1.9",
-    "@iconify-json/clarity": "1.1.8"
+    "typescript": "^5.0.0"
   }
 }

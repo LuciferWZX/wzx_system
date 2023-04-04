@@ -6,6 +6,7 @@ import {Icon} from "@@/exports";
 import {useRequest} from "ahooks";
 import userStore from "@/stores/user.store";
 import {ResCode} from "@/types/APIResponseType";
+import {motion} from "framer-motion";
 const {Text,Link}=Typography
 const {useToken}=theme
 
@@ -47,7 +48,11 @@ const AccountForm:FC = () => {
         }
     }
     return(
-        <StyledAccountForm>
+        <StyledAccountForm
+            key="accounts_page"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 , transition: { duration: 0.5 }}}
+            exit={{ x: 20, opacity: 0 }}>
             {contextHolder}
             <Space direction={"vertical"} size={12} style={{width:"100%"}}>
                 <Text strong={true} className={'title'}>登录</Text>
@@ -108,7 +113,7 @@ const AccountForm:FC = () => {
         </StyledAccountForm>
     )
 }
-const StyledAccountForm = styled.div`
+const StyledAccountForm = styled(motion.div)`
   width: 340px;
   min-height: 385px;
   .title{

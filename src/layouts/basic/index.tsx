@@ -2,9 +2,12 @@ import React,{FC} from "react"
 import {Outlet, styled} from "umi";
 import {Layout} from "antd";
 import Header from "@/layouts/basic/header";
+import {motion} from "framer-motion";
 const BasicLayout:FC = () => {
     return(
-            <StyledBasicLayout>
+            <StyledBasicLayout
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0 }}>
                 <Layout className={'layout-container'}>
                     <Header/>
                     <Layout.Content>
@@ -16,7 +19,7 @@ const BasicLayout:FC = () => {
             </StyledBasicLayout>
     )
 }
-const StyledBasicLayout = styled.div`
+const StyledBasicLayout = styled(motion.div)`
   height: 100%;
   .layout-container{
     height: 100%;

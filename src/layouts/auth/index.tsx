@@ -2,10 +2,13 @@ import React, {FC} from "react"
 import {Outlet,styled} from "umi";
 import {Col, Row,theme} from "antd";
 import LottieAnimation from "@/layouts/auth/LottieAnimation";
+import {AnimatePresence} from "framer-motion";
+import {useLocation} from "@@/exports";
 
 const {useToken}=theme
 const AuthLayout:FC = () => {
     const {token:{colorBgContainer}}=useToken()
+    const location = useLocation();
     return(
             <StyledAuthLayout>
                 <Row className={'horizon-container'}  align="middle" >

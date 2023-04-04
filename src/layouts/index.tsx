@@ -1,10 +1,12 @@
-import {FC} from "react";
-import { Outlet,styled } from 'umi';
+import React, {FC} from "react";
+import { Outlet,styled,useLocation } from 'umi';
+import {AnimatePresence} from "framer-motion";
 
 const Layout:FC=()=> {
+    const location = useLocation();
   return (
     <StyledLayout>
-      <Outlet />
+        <Outlet/>
     </StyledLayout>
   );
 }
