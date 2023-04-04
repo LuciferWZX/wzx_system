@@ -7,7 +7,7 @@ const BasicLayout:FC = () => {
     return(
             <StyledBasicLayout
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0 }}>
+                animate={{ opacity: 1 }}>
                 <Layout className={'layout-container'}>
                     <Header/>
                     <Layout.Content>

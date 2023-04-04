@@ -6,7 +6,7 @@ import {Icon} from "@@/exports";
 import {useRequest} from "ahooks";
 import userStore from "@/stores/user.store";
 import {ResCode} from "@/types/APIResponseType";
-import {motion} from "framer-motion";
+import {LayoutGroup, motion} from "framer-motion";
 const {Text,Link}=Typography
 const {useToken}=theme
 
@@ -63,7 +63,11 @@ const AccountForm:FC = () => {
                             {accounts.map((account,index)=>{
                                 if (index === 0){
                                     return(
-                                        <AccountBox  key={account.id}>
+                                        <AccountBox
+                                            initial={{ opacity: 0, scale: 0.5 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ duration: 0.3 }}
+                                            key={account.id}>
                                             <Space>
                                                 <Avatar size={66} src={account.avatar} />
                                                 <div className={'welcome'}>
@@ -76,7 +80,13 @@ const AccountForm:FC = () => {
                                     )
                                 }
                                 return(
-                                    <AccountBox key={account.id}>
+                                    <AccountBox
+                                        whileHover={{ scale: 1.1 }}
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.3 }}
+                                        key={account.id}
+                                        style={{cursor:'pointer'}}>
                                         <Space>
                                             <Avatar size={40} src={account.avatar} />
                                             <div className={'normal-list'}>
@@ -87,6 +97,7 @@ const AccountForm:FC = () => {
                                     </AccountBox>
                                 )
                             })}
+
                         </Space>
                     </StyledAccountsBox>
                     <Row align="middle">
@@ -129,7 +140,7 @@ const StyledAccountForm = styled(motion.div)`
 const StyledAccountsBox = styled.div`
     max-height: 300px;
 `
-const AccountBox = styled.div`
+const AccountBox = styled(motion.div)`
     .welcome{
       font-weight: 500;
       font-size: 18px;
