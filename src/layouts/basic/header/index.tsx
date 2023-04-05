@@ -11,7 +11,8 @@ const {Text}=Typography
 const Header:FC = () => {
     const {token:{colorBgContainer}}=useToken()
     const {avatar,nickname}=useSnapshot(userStore.state).user as User ??{}
-    const {modal}=useOutletContext<OutletProps>()
+    const {modal,socket}=useOutletContext<OutletProps>()
+    console.log(2222221111,socket?.connected)
     const switchUser=async ()=>{
         let instance = modal.info({
             centered:true,

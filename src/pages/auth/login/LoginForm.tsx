@@ -5,6 +5,8 @@ import {AlipayCircleOutlined, GithubOutlined, GoogleOutlined, QqOutlined, Wechat
 
 import useLogin from "@/pages/auth/login/hooks/useLogin";
 import {OutletProps} from "@/layouts";
+import {history} from "@@/core/history";
+import useAccounts from "@/pages/auth/login/hooks/useAccounts";
 
 const {Text,Link}=Typography
 type LoginFormType={
@@ -19,9 +21,10 @@ const LoginForm:FC = () => {
     const onFinish=async (values:LoginFormType)=>{
         await runLogin({type:values.type,value:values.value,way:values.way})
     }
-
+    const {accounts}=useAccounts()
     return(
         <StyledLoginForm>
+            {accounts.length>0 && <Button disabled={loginLoading} onClick={()=>history.replace("/auth/accounts")} type={"text"} shape={"circle"} icon={<Icon icon={"ion:md-arrow-round-back"} className={"anticon"}/>} />}
             <Space direction={"vertical"} size={12} style={{width:"100%"}}>
                 <Text strong={true} className={'title'}>登录</Text>
                 <Text type={"secondary"} className={'desc'}>请填写您的信息</Text>

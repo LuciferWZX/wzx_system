@@ -31,7 +31,6 @@ const request = extend({
 request.interceptors.request.use((url, options) => {
     let header:any = options.headers
     if (userStore.state.token && !header.Authorization){
-        console.log(!header.Authorization)
         header.Authorization = `Bearer ${userStore.state.token}`
     }
     return {

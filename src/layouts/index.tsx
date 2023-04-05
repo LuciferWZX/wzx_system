@@ -18,7 +18,9 @@ const Layout:FC=()=> {
     const [notificationApi, nContextHolder] = notification.useNotification();
     const [modalApi, mContextHolder] = Modal.useModal();
     const {socket}=useWebsocket()
+
     useUserWebsocket(socket)
+
   return (
     <StyledLayout>
         {contextHolder}

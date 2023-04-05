@@ -106,7 +106,7 @@ const AccountForm:FC = () => {
                     </StyledAccountsBox>
                     <Row align="middle">
                         <Col span={10}>
-                            <Link onClick={()=>history.push("/auth/login")}>登录其他账号</Link>
+                            <Link onClick={()=>history.replace("/auth/login")}>登录其他账号</Link>
                         </Col>
                         <Col span={14}>
                             <Button disabled={accounts.length>0&&accounts[0].error} loading={switchLoading} onClick={loginCacheCount} size={"large"} type="primary">

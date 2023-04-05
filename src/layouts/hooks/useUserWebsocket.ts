@@ -11,7 +11,9 @@ type MessagePayloadType={
 }
 const useUserWebsocket = (socket:Socket) => {
     const {user}=useSnapshot(userStore.state)
+
     useLayoutEffect(()=>{
+
         if (socket && user?.id){
             //【聊天模块】【我对1 ， 我对多】监听自己获得的（消息）
             socket.on(`${SocketChannel.Message}-${user.id}`,(payload:string)=>{
@@ -39,6 +41,6 @@ const useUserWebsocket = (socket:Socket) => {
                 }
             })
         }
-    },[user?.id,socket])
+    },[user?.id,socket?.connected])
 }
 export default useUserWebsocket
