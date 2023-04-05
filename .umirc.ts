@@ -32,7 +32,8 @@ export default defineConfig({
       "material-symbols:settings-suggest-outline-rounded",
         "ci:log-out",
         "ion:md-arrow-round-back",
-        "clarity:switch-line"
+        "clarity:switch-line",
+        "material-symbols:close-rounded"
     ]
   },
   valtio:{},

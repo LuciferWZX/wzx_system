@@ -1,12 +1,14 @@
 import React, {FC, useLayoutEffect} from "react";
-import {styled,history} from "umi";
-import {Avatar, Button, Col, Divider, Row, Space, Typography, theme, message} from "antd";
-import useAccounts, {AccountCache} from "@/pages/auth/accounts/hooks/useAccounts";
+import {styled, history, useOutletContext} from "umi";
+import {Avatar, Button, Col, Divider, Row, Space, Typography, theme} from "antd";
+import useAccounts from "@/pages/auth/accounts/hooks/useAccounts";
 import {Icon} from "@@/exports";
 import {useRequest} from "ahooks";
 import userStore from "@/stores/user.store";
 import {ResCode} from "@/types/APIResponseType";
-import {LayoutGroup, motion} from "framer-motion";
+import {motion} from "framer-motion";
+import {OutletProps} from "@/layouts";
+import {showLoginNotification} from "@/pages/auth/common";
 const {Text,Link}=Typography
 const {useToken}=theme
 
@@ -14,7 +16,7 @@ const AccountForm:FC = () => {
     const {token:{colorTextDisabled}}=useToken()
     const {accounts,isOk,switchAccount,updateState}=useAccounts()
     const {runAsync:runSwitchProfile,loading:switchLoading}=useRequest(userStore.action.switchProfile,{manual:true})
-    const [messageApi, contextHolder] = message.useMessage();
+    const {message,notification}=useOutletContext<OutletProps>()
     useLayoutEffect(()=>{
         if (isOk && accounts.length===0){
             history.replace("/auth/login")
@@ -25,21 +27,24 @@ const AccountForm:FC = () => {
     }
     const loginCacheCount=async ()=>{
         if (accounts && accounts.length>0){
+            console.log(1111,accounts)
             const currentAccount = accounts[0]
-            messageApi.open({
+            message.open({
                 type:"loading",
                 content:"正在验证用户信息",
                 duration:0,
                 key:"switch-account"
             })
+
             const res = await runSwitchProfile(currentAccount.token)
             if (res.code === ResCode.success){
-                messageApi.destroy("switch-account")
+                message.destroy("switch-account")
+                showLoginNotification(notification,res.data)
                 history.replace("/")
                 return
             }
             updateState(currentAccount.id,true)
-            messageApi.open({
+            message.open({
                 type:"error",
                 icon:<Icon icon={"material-symbols:cancel-rounded"} className={"anticon"} />,
                 content:res.message,
@@ -53,7 +58,6 @@ const AccountForm:FC = () => {
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 , transition: { duration: 0.5 }}}
             exit={{ x: 20, opacity: 0 }}>
-            {contextHolder}
             <Space direction={"vertical"} size={12} style={{width:"100%"}}>
                 <Text strong={true} className={'title'}>登录</Text>
                 <Text type={"secondary"} className={'desc'}>请选择您的账户</Text>

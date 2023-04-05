@@ -1,10 +1,36 @@
 import React, {FC} from "react";
-import { Outlet,styled,useLocation } from 'umi';
-
+import { Outlet,styled } from 'umi';
+import {message, Modal, notification} from "antd";
+import {MessageInstance} from "antd/es/message/interface";
+import {NotificationInstance} from "antd/es/notification/interface";
+import {ModalStaticFunctions} from "antd/es/modal/confirm";
+import useWebsocket from "@/layouts/hooks/useWebsocket";
+import {Socket} from "socket.io-client";
+import useUserWebsocket from "@/layouts/hooks/useUserWebsocket";
+export type OutletProps= {
+    message:MessageInstance
+    notification:NotificationInstance
+    modal:ModalStaticFunctions
+    socket:Socket|null
+}
 const Layout:FC=()=> {
+    const [messageApi, contextHolder] = message.useMessage();
+    const [notificationApi, nContextHolder] = notification.useNotification();
+    const [modalApi, mContextHolder] = Modal.useModal();
+    const {socket}=useWebsocket()
+    useUserWebsocket(socket)
   return (
     <StyledLayout>
-        <Outlet/>
+        {contextHolder}
+        {nContextHolder}
+        {mContextHolder}
+        <Outlet
+            context={{
+                message:messageApi,
+                notification:notificationApi,
+                modal:modalApi,
+                socket
+        } as OutletProps}/>
     </StyledLayout>
   );
 }

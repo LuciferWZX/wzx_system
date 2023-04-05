@@ -1,9 +1,10 @@
 import React, {FC} from "react";
 import {Button, Divider, Form, Input, Segmented, Space, Tooltip, Typography} from "antd";
-import { Icon,styled } from 'umi';
+import {Icon, styled, useOutletContext} from 'umi';
 import {AlipayCircleOutlined, GithubOutlined, GoogleOutlined, QqOutlined, WechatOutlined} from "@ant-design/icons";
 
 import useLogin from "@/pages/auth/login/hooks/useLogin";
+import {OutletProps} from "@/layouts";
 
 const {Text,Link}=Typography
 type LoginFormType={
@@ -13,14 +14,14 @@ type LoginFormType={
 }
 const LoginForm:FC = () => {
     const [form] = Form.useForm<LoginFormType>()
-    const {run:runLogin,loading:loginLoading,contextHolder}=useLogin()
+    const {message,notification} = useOutletContext<OutletProps>();
+    const {run:runLogin,loading:loginLoading}=useLogin(message,notification)
     const onFinish=async (values:LoginFormType)=>{
         await runLogin({type:values.type,value:values.value,way:values.way})
     }
 
     return(
         <StyledLoginForm>
-            {contextHolder}
             <Space direction={"vertical"} size={12} style={{width:"100%"}}>
                 <Text strong={true} className={'title'}>登录</Text>
                 <Text type={"secondary"} className={'desc'}>请填写您的信息</Text>
@@ -98,7 +99,6 @@ const LoginForm:FC = () => {
                     <Link>去注册</Link>
                 </Space>
             </Space>
-
         </StyledLoginForm>
     )
 }

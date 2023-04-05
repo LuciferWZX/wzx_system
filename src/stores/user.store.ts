@@ -17,10 +17,11 @@ type Actions = {
     profile:()=>Promise<APIResponseType<User|null>>
     switchProfile:(token:string)=>Promise<APIResponseType<User|null>>
     login:(params:{type:"password"|"verifyCode",way:string,value:string})=>Promise<void>
+    clear:()=>void
 }
 const initState:UserStoreProps = {
     user:null,
-    token:"",
+    token:""
 }
 const state:UserStoreProps & UserComputedProps=proxyWithComputed<UserStoreProps,UserComputedProps>(initState,{
 
@@ -41,9 +42,14 @@ const action:Actions = {
         await delay(1000)
         const res = await profile(token)
         if (res.data){
+            state.token=token
             state.user = res.data
         }
         return res
+    },
+    clear:async ()=>{
+        state.user = initState.user
+        state.token = initState.token
     }
 }
 /**
@@ -72,8 +78,6 @@ subscribeKey(state,"user",(user:User|null)=>{
         store.set(StoreKey.Accounts,JSON.stringify([...accounts]))
         store.set(StoreKey.CurrentUserId,user.id)
         return
-    }else{
-        store.remove(StoreKey.CurrentUserId)
     }
 })
 

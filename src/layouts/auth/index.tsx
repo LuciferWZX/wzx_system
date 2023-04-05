@@ -2,13 +2,13 @@ import React, {FC} from "react"
 import {Outlet,styled} from "umi";
 import {Col, Row,theme} from "antd";
 import LottieAnimation from "@/layouts/auth/LottieAnimation";
-import {AnimatePresence} from "framer-motion";
-import {useLocation} from "@@/exports";
+import { useOutletContext} from "@@/exports";
+import {OutletProps} from "@/layouts";
 
 const {useToken}=theme
 const AuthLayout:FC = () => {
     const {token:{colorBgContainer}}=useToken()
-    const location = useLocation();
+    const layoutContext = useOutletContext<OutletProps>();
     return(
             <StyledAuthLayout>
                 <Row className={'horizon-container'}  align="middle" >
@@ -16,7 +16,7 @@ const AuthLayout:FC = () => {
                         <LottieAnimation />
                     </Col>
                     <Col  flex={3} className={'page-container'} style={{backgroundColor:colorBgContainer,flex:"3 3"}}>
-                        <Outlet/>
+                        <Outlet context={layoutContext}/>
                     </Col>
                 </Row>
             </StyledAuthLayout>

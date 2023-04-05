@@ -1,17 +1,30 @@
-import {styled,useSnapshot,Icon,history} from "umi";
+import {styled, useSnapshot, Icon, history, useOutletContext} from "umi";
 import {Avatar, Typography, Layout, Space, theme, Dropdown, MenuProps} from "antd";
 import userStore from "@/stores/user.store";
-import {FC} from "react";
+import React, {FC} from "react";
 import {User} from "@/types/User";
-import {UserSwitchOutlined} from "@ant-design/icons";
+import {LoadingOutlined, UserSwitchOutlined} from "@ant-design/icons";
+import {OutletProps} from "@/layouts";
+import {delay} from "@/utils/delay";
 const {useToken}=theme
 const {Text}=Typography
 const Header:FC = () => {
     const {token:{colorBgContainer}}=useToken()
-    const {avatar,nickname}=useSnapshot(userStore.state).user as User
+    const {avatar,nickname}=useSnapshot(userStore.state).user as User ??{}
+    const {modal}=useOutletContext<OutletProps>()
+    const switchUser=async ()=>{
+        let instance = modal.info({
+            centered:true,
+            width:70,
+            transitionName:"ant-fade",
+            icon:<LoadingOutlined />,
+            footer:null
+        })
 
-    const switchUser=()=>{
-        history.push("/auth/accounts")
+        await delay(1000)
+        instance.destroy()
+        history.replace("/auth/accounts")
+        userStore.action.clear()
     }
     const items: MenuProps['items'] = [
         {
@@ -38,9 +51,10 @@ const Header:FC = () => {
     ]
     return(
         <StyledHeader style={{backgroundColor:colorBgContainer}}>
-            <Dropdown trigger={["click"]} destroyPopupOnHide={true} menu={{ items }}>
+            <div>LOGO</div>
+            <Dropdown trigger={["click"]} menu={{ items }}>
                 <AvatarBox >
-                    <Space>
+                    <Space >
                         <Avatar shape={"square"} size={40} src={avatar}/>
                         <Text className={"nickname"} strong={true}>{nickname}</Text>
                         <Icon icon={"ic:round-keyboard-arrow-down"} className={"anticon done-icon"} />
@@ -56,8 +70,10 @@ const StyledHeader = styled(Layout.Header)`
   padding: 0 10px;
   display: inline-flex;
   align-items: center;
+  justify-content: space-between;
 `
 const AvatarBox = styled.div`
+  
   height: 57px;
   background-color:transparent ;
   border: 1px solid transparent;

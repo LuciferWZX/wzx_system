@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {useRequest} from "ahooks";
-import {message} from "antd";
+import {Avatar, Typography, Space} from "antd";
 import {login} from "@/services/api/auth";
 import {ResCode} from "@/types/APIResponseType";
 import {Icon,history} from "umi";
 import userStore from "@/stores/user.store";
 import {delay} from "@/utils/delay";
-
-const useLogin = () => {
+import {MessageInstance} from "antd/es/message/interface";
+import {NotificationInstance} from "antd/es/notification/interface";
+import {showLoginNotification} from "@/pages/auth/common";
+const {Text}=Typography
+const useLogin = (messageApi:MessageInstance,notification:NotificationInstance) => {
     const [failedCount, setFailedCount] = useState<number>(0);
-    const [messageApi, contextHolder] = message.useMessage();
     const handleLogin=async (params:{type:"password"|"verifyCode",way:string,value:string})=>{
         if (failedCount >= 2){
             messageApi.open({
@@ -53,6 +55,7 @@ const useLogin = () => {
         const res2 = await userStore.action.profile()
         if (res2.code === ResCode.success){
             messageApi.destroy("login")
+            showLoginNotification(notification,res2.data)
             history.replace("/")
             return
         }
@@ -81,8 +84,6 @@ const useLogin = () => {
         }
     },[failedCount])
     return {
-        message:messageApi,
-        contextHolder,
         loading:loginLoading,
         run:runLogin
     }
