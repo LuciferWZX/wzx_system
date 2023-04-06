@@ -1,18 +1,18 @@
 import {styled, useSnapshot, Icon, history, useOutletContext} from "umi";
-import {Avatar, Typography, Layout, Space, theme, Dropdown, MenuProps} from "antd";
+import {Avatar, Typography, Layout, Space, theme, Dropdown, MenuProps, Badge} from "antd";
 import userStore from "@/stores/user.store";
 import React, {FC} from "react";
 import {User} from "@/types/User";
 import {LoadingOutlined, UserSwitchOutlined} from "@ant-design/icons";
 import {OutletProps} from "@/layouts";
 import {delay} from "@/utils/delay";
+import {ReadyState} from "@/types/Socket";
 const {useToken}=theme
 const {Text}=Typography
 const Header:FC = () => {
     const {token:{colorBgContainer}}=useToken()
-    const {avatar,nickname}=useSnapshot(userStore.state).user as User ??{}
-    const {modal,socket}=useOutletContext<OutletProps>()
-    console.log(2222221111,socket?.connected)
+    const {user,readyState}=useSnapshot(userStore.state)
+    const {modal}=useOutletContext<OutletProps>()
     const switchUser=async ()=>{
         let instance = modal.info({
             centered:true,
@@ -56,8 +56,10 @@ const Header:FC = () => {
             <Dropdown trigger={["click"]} menu={{ items }}>
                 <AvatarBox >
                     <Space >
-                        <Avatar shape={"square"} size={40} src={avatar}/>
-                        <Text className={"nickname"} strong={true}>{nickname}</Text>
+                        <Badge className={'the-dot'} style={{backgroundColor:readyState === ReadyState.Open?"hsl(102, 53%, 61%)":"red"}} dot={true} offset={[0, 40]}>
+                            <Avatar shape={"square"} size={40} src={user?.avatar}/>
+                        </Badge>
+                        <Text className={"nickname"} strong={true}>{user?.nickname}</Text>
                         <Icon icon={"ic:round-keyboard-arrow-down"} className={"anticon done-icon"} />
                     </Space>
                 </AvatarBox>
@@ -85,6 +87,13 @@ const AvatarBox = styled.div`
   transition-duration: 0.2s;
   display: flex;
   align-content: center;
+  .the-dot{
+    .ant-badge-dot{
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+    }
+  }
   &:hover{
     background-color:#F5F5F7 ;
     border: 1px solid #F5F5F7;

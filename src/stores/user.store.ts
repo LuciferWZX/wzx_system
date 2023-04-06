@@ -5,10 +5,12 @@ import {APIResponseType} from "@/types/APIResponseType";
 import store from "storejs"
 import {StoreKey} from "@/types/StoreKey";
 import {delay} from "@/utils/delay";
+import {ReadyState} from "@/types/Socket";
 
 type UserStoreProps = {
     user:User,
     token:string
+    readyState:ReadyState
 }
 type UserComputedProps = {
 
@@ -21,7 +23,8 @@ type Actions = {
 }
 const initState:UserStoreProps = {
     user:null,
-    token:""
+    token:"",
+    readyState:ReadyState.Closed
 }
 const state:UserStoreProps & UserComputedProps=proxyWithComputed<UserStoreProps,UserComputedProps>(initState,{
 

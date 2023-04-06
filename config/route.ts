@@ -21,7 +21,15 @@ const routes:any[]=[
         path: '/',
         component: '@/layouts/basic',
         routes: [
-            { path: '/',redirect:'/home'},
+            { path: '/',redirect:'/contact'},
+            {
+                path: '/message',//消息
+                component: 'message' ,
+            },
+            {
+                path: '/contact',//联系人
+                component: 'contact' ,
+            },
             {
                 path: '/home',//首页
                 component: 'home' ,

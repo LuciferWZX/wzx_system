@@ -6,20 +6,18 @@ import {NotificationInstance} from "antd/es/notification/interface";
 import {ModalStaticFunctions} from "antd/es/modal/confirm";
 import useWebsocket from "@/layouts/hooks/useWebsocket";
 import {Socket} from "socket.io-client";
-import useUserWebsocket from "@/layouts/hooks/useUserWebsocket";
+
 export type OutletProps= {
     message:MessageInstance
     notification:NotificationInstance
     modal:ModalStaticFunctions
-    socket:Socket|null
+    socket:Socket
 }
 const Layout:FC=()=> {
     const [messageApi, contextHolder] = message.useMessage();
     const [notificationApi, nContextHolder] = notification.useNotification();
     const [modalApi, mContextHolder] = Modal.useModal();
-    const {socket}=useWebsocket()
-
-    useUserWebsocket(socket)
+    const {socket}=useWebsocket(messageApi)
 
   return (
     <StyledLayout>
@@ -31,7 +29,7 @@ const Layout:FC=()=> {
                 message:messageApi,
                 notification:notificationApi,
                 modal:modalApi,
-                socket
+                socket:socket,
         } as OutletProps}/>
     </StyledLayout>
   );

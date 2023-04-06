@@ -7,6 +7,7 @@ import 'dayjs/locale/zh-cn';
 import {createGlobalStyle, history} from "umi"
 import userState from "@/stores/user.store"
 import {ResCode} from "@/types/APIResponseType";
+import userStore from "@/stores/user.store";
 
 export const getInitialState = async ()=>{
     console.log("[初始化数据：开始]")
@@ -41,7 +42,7 @@ const initUser=async ()=>{
     const store = require("storejs")
     const token:string|undefined = store.get(StoreKey.Auth)
     if (!token){
-        console.warn("[token不存在]:",token)
+        console.log("[token不存在]",)
         history.replace("/auth/login")
         return null
     }
@@ -49,6 +50,7 @@ const initUser=async ()=>{
     //初始化用户的数据
     const res = await userState.action.profile()
     if (res.code!== ResCode.success){
+        userStore.state.user = null;
         history.replace("/auth/login")
     }
 }
