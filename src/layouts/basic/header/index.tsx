@@ -1,17 +1,21 @@
-import {styled, useSnapshot, Icon, history, useOutletContext} from "umi";
+import {styled, Icon, history, useOutletContext} from "umi";
 import {Avatar, Typography, Layout, Space, theme, Dropdown, MenuProps, Badge} from "antd";
-import userStore from "@/stores/user.store";
 import React, {FC} from "react";
-import {User} from "@/types/User";
 import {LoadingOutlined, UserSwitchOutlined} from "@ant-design/icons";
 import {OutletProps} from "@/layouts";
 import {delay} from "@/utils/delay";
 import {ReadyState} from "@/types/Socket";
+import {useUserStore} from "@/stores";
+import {shallow} from "zustand/shallow";
 const {useToken}=theme
 const {Text}=Typography
 const Header:FC = () => {
     const {token:{colorBgContainer}}=useToken()
-    const {user,readyState}=useSnapshot(userStore.state)
+    const {user,readyState,clear}=useUserStore(state => ({
+        user:state.user,
+        readyState:state.readyState,
+        clear:state.clear,
+    }),shallow)
     const {modal}=useOutletContext<OutletProps>()
     const switchUser=async ()=>{
         let instance = modal.info({
@@ -25,7 +29,7 @@ const Header:FC = () => {
         await delay(1000)
         instance.destroy()
         history.replace("/auth/accounts")
-        userStore.action.clear()
+        clear()
     }
     const items: MenuProps['items'] = [
         {
@@ -52,7 +56,7 @@ const Header:FC = () => {
     ]
     return(
         <StyledHeader style={{backgroundColor:colorBgContainer}}>
-            <div>LOGO</div>
+            <div>xxxx</div>
             <Dropdown trigger={["click"]} menu={{ items }}>
                 <AvatarBox >
                     <Space >

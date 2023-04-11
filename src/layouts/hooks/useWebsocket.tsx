@@ -1,18 +1,22 @@
 import {useLayoutEffect, useState} from "react";
 import {io, Socket} from "socket.io-client";
-import {useSnapshot} from "umi";
-import userStore from "@/stores/user.store";
+// import userStore from "@/stores/user.store";
 import {SocketChannel} from "@/types/SocketChannel";
 import {MsgType} from "@/types/MsgType";
 import {MessagePayloadType, ReadyState} from "@/types/Socket";
 import {MessageInstance} from "antd/es/message/interface";
 import {Typography} from 'antd'
 import {LoadingOutlined} from "@ant-design/icons";
+import {useUserStore} from "@/stores";
+import {shallow} from "zustand/shallow";
 const {Text}=Typography
 const useWebsocket = (message:MessageInstance) => {
-    const [websocket, setWebsocket] = useState<Socket|null>(null);
     const [readyState, setReadyState] = useState<ReadyState>(ReadyState.Closed);
-    const {token,user} = useSnapshot(userStore.state)
+    const {token,user,websocket} = useUserStore(state => ({
+        token:state.token,
+        user:state.user,
+        websocket:state.websocket,
+    }),shallow)
     useLayoutEffect(()=>{
         if (user?.id){
             //id更变了,socket存在，先清除
@@ -31,7 +35,9 @@ const useWebsocket = (message:MessageInstance) => {
     },[websocket])
     //同步连接状态到store
     useLayoutEffect(()=>{
-        userStore.state.readyState = readyState
+        useUserStore.setState({
+            readyState
+        })
         if (readyState === ReadyState.Connecting && user){
             message.error({
                 content:<Text strong={true} style={{color:"red"}}>正在进行连接...</Text>,
@@ -52,7 +58,7 @@ const useWebsocket = (message:MessageInstance) => {
             websocket.disconnect()
             websocket.close()
             websocket.removeAllListeners()
-            setWebsocket(null)
+            useUserStore.setState({websocket:null})
         }
     }
     /**
@@ -67,7 +73,7 @@ const useWebsocket = (message:MessageInstance) => {
                 token:token
             }
         })
-        setWebsocket(socket)
+        useUserStore.setState({websocket:socket})
     }
     const listenEvents=()=>{
         if (websocket){
@@ -154,10 +160,6 @@ const useWebsocket = (message:MessageInstance) => {
         }catch (e){
             console.error(`${SocketChannel.Message}-${user.id} 出错`,e)
         }
-    }
-    return {
-        socket:websocket,
-        readyState
     }
 }
 export default useWebsocket

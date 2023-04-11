@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {useRequest} from "ahooks";
-import {Avatar, Typography, Space} from "antd";
+import { Typography} from "antd";
 import {login} from "@/services/api/auth";
 import {ResCode} from "@/types/APIResponseType";
 import {Icon,history} from "umi";
-import userStore from "@/stores/user.store";
 import {delay} from "@/utils/delay";
 import {MessageInstance} from "antd/es/message/interface";
 import {NotificationInstance} from "antd/es/notification/interface";
 import {showLoginNotification} from "@/pages/auth/common";
+import {useUserStore} from "@/stores";
 const {Text}=Typography
 const useLogin = (messageApi:MessageInstance,notification:NotificationInstance) => {
     const [failedCount, setFailedCount] = useState<number>(0);
@@ -44,7 +44,10 @@ const useLogin = (messageApi:MessageInstance,notification:NotificationInstance) 
             })
             return
         }
-        userStore.state.token = res.data.token
+        const {setState:setUserState,getState:getUserState}=useUserStore
+        setUserState({
+            token:res.data.token
+        })
         messageApi.open({
             type:"loading",
             content:"正在验证用户信息",
@@ -52,7 +55,7 @@ const useLogin = (messageApi:MessageInstance,notification:NotificationInstance) 
             key:"login"
         })
         await delay(1000)
-        const res2 = await userStore.action.profile()
+        const res2 = await getUserState().profile()
         if (res2.code === ResCode.success){
             messageApi.destroy("login")
             showLoginNotification(notification,res2.data)

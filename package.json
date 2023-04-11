@@ -20,7 +20,8 @@
     "styled-components": "^5.3.9",
     "umi": "^4.0.64",
     "umi-request": "^1.4.0",
-    "valtio": "^1.10.3"
+    "valtio": "^1.10.3",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@iconify-json/ant-design": "1.1.5",
@@ -35,6 +36,8 @@
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@umijs/plugins": "^4.0.63",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "@iconify-json/mingcute": "1.1.5",
+    "@iconify-json/ph": "1.1.5"
   }
 }

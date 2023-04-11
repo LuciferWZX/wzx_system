@@ -10,6 +10,8 @@ specifiers:
   '@iconify-json/ion': 1.1.9
   '@iconify-json/material-symbols': 1.1.36
   '@iconify-json/mdi': 1.1.50
+  '@iconify-json/mingcute': 1.1.5
+  '@iconify-json/ph': 1.1.5
   '@types/react': ^18.0.0
   '@types/react-dom': ^18.0.0
   '@types/styled-components': ^5.1.26
@@ -26,6 +28,7 @@ specifiers:
   umi: ^4.0.64
   umi-request: ^1.4.0
   valtio: ^1.10.3
+  zustand: ^4.3.7
 
 dependencies:
   '@ant-design/icons': 5.0.1
@@ -40,6 +43,7 @@ dependencies:
   umi: 4.0.64_n7clz26oq5eyyxsd56vllomtba
   umi-request: 1.4.0
   valtio: 1.10.3
+  zustand: 4.3.7
 
 devDependencies:
   '@iconify-json/ant-design': 1.1.5
@@ -50,6 +54,8 @@ devDependencies:
   '@iconify-json/ion': 1.1.9
   '@iconify-json/material-symbols': 1.1.36
   '@iconify-json/mdi': 1.1.50
+  '@iconify-json/mingcute': 1.1.5
+  '@iconify-json/ph': 1.1.5
   '@types/react': 18.0.31
   '@types/react-dom': 18.0.11
   '@types/styled-components': 5.1.26
@@ -2623,6 +2629,18 @@ packages:
 
   /@iconify-json/mdi/1.1.50:
     resolution: {integrity: sha512-SgbT5w5eHCdOG74ZWPz7HlTGk6VsifIJhNi6lAsxj/5Nlqt6Cz4LlQmSa9eecU9p075Jub2aAx/o7YI+GCahRQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/mingcute/1.1.5:
+    resolution: {integrity: sha512-k2CaSPbi3YXvV2O0U+PLPJzjLF+5WqcqTGc1apEle06tj5GPqAwRjCpaZsHjWo8jYhnmi6YyjXJmS/VX+5Kx9g==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/ph/1.1.5:
+    resolution: {integrity: sha512-iLXq3nohfGge22gL2tZmQ2WHBKkKkIbGWrkuyC8arckS4PWaONyh4A+uDPtSek9QbYDvi9AE2+NxWkNZhANotA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
@@ -9991,4 +10009,19 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: false
+
+  /zustand/4.3.7:
+    resolution: {integrity: sha512-dY8ERwB9Nd21ellgkBZFhudER8KVlelZm8388B5nDAXhO/+FZDhYMuRnqDgu5SYyRgz/iaf8RKnbUs/cHfOGlQ==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      use-sync-external-store: 1.2.0
     dev: false

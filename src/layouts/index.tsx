@@ -11,13 +11,12 @@ export type OutletProps= {
     message:MessageInstance
     notification:NotificationInstance
     modal:ModalStaticFunctions
-    socket:Socket
 }
 const Layout:FC=()=> {
     const [messageApi, contextHolder] = message.useMessage();
     const [notificationApi, nContextHolder] = notification.useNotification();
     const [modalApi, mContextHolder] = Modal.useModal();
-    const {socket}=useWebsocket(messageApi)
+    useWebsocket(messageApi)
 
   return (
     <StyledLayout>
@@ -29,7 +28,6 @@ const Layout:FC=()=> {
                 message:messageApi,
                 notification:notificationApi,
                 modal:modalApi,
-                socket:socket,
         } as OutletProps}/>
     </StyledLayout>
   );

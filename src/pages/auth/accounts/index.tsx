@@ -4,18 +4,19 @@ import {Avatar, Button, Col, Divider, Row, Space, Typography, theme} from "antd"
 import useAccounts from "@/pages/auth/accounts/hooks/useAccounts";
 import {Icon} from "@@/exports";
 import {useRequest} from "ahooks";
-import userStore from "@/stores/user.store";
+// import userStore from "@/stores/user.store";
 import {ResCode} from "@/types/APIResponseType";
 import {motion} from "framer-motion";
 import {OutletProps} from "@/layouts";
 import {showLoginNotification} from "@/pages/auth/common";
+import {useUserStore} from "@/stores";
 const {Text,Link}=Typography
 const {useToken}=theme
 
 const AccountForm:FC = () => {
     const {token:{colorTextDisabled}}=useToken()
     const {accounts,isOk,switchAccount,updateState}=useAccounts()
-    const {runAsync:runSwitchProfile,loading:switchLoading}=useRequest(userStore.action.switchProfile,{manual:true})
+    const {runAsync:runSwitchProfile,loading:switchLoading}=useRequest(useUserStore.getState().switchProfile,{manual:true})
     const {message,notification}=useOutletContext<OutletProps>()
     useLayoutEffect(()=>{
         if (isOk && accounts.length===0){

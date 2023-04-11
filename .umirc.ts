@@ -18,7 +18,7 @@ export default defineConfig({
     '@umijs/plugins/dist/initial-state',
     '@umijs/plugins/dist/model',
     '@umijs/plugins/dist/styled-components',
-    '@umijs/plugins/dist/valtio',
+    // '@umijs/plugins/dist/valtio',
     '@umijs/plugins/dist/react-query',
     ],
   model:{},
@@ -28,14 +28,16 @@ export default defineConfig({
     autoInstall: {},
     include:[
         "material-symbols:cancel-rounded",
-      "ic:round-keyboard-arrow-down",
-      "material-symbols:settings-suggest-outline-rounded",
+        "ic:round-keyboard-arrow-down",
+        "material-symbols:settings-suggest-outline-rounded",
         "ci:log-out",
         "ion:md-arrow-round-back",
         "clarity:switch-line",
-        "material-symbols:close-rounded"
+        "material-symbols:close-rounded",
+        "mingcute:contacts-fill",
+        "ph:wechat-logo-duotone"
     ]
   },
-  valtio:{},
+  // valtio:{},
   reactQuery:{}
 });

@@ -3,17 +3,22 @@ import {Outlet, styled} from "umi";
 import {Layout} from "antd";
 import Header from "@/layouts/basic/header";
 import {motion} from "framer-motion";
+import Slider from "@/layouts/basic/Sider";
 const BasicLayout:FC = () => {
+    // const {token:{colorBgContainer}}=useToken()
     return(
             <StyledBasicLayout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}>
                 <Layout className={'layout-container'}>
-                    <Header/>
-                    <Layout.Content>
-                        BasicLayout
-                        <Outlet/>
-                    </Layout.Content>
+                    <Slider/>
+                    <Layout>
+                        <Header/>
+                        <Layout.Content>
+                            BasicLayout
+                            <Outlet/>
+                        </Layout.Content>
+                    </Layout>
                 </Layout>
 
             </StyledBasicLayout>
