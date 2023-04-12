@@ -1,13 +1,14 @@
 import React, {FC, useLayoutEffect} from "react";
 import {styled, useOutletContext} from "umi";
-import {Avatar, Button, Descriptions, Popover, Space, Typography, theme, Form, Input, Select} from "antd";
-import {ContactUser} from "@/types/User";
+import {Avatar, Button, Descriptions, Popover, Space, Typography, theme, Form, Input, Select, Divider} from "antd";
+import {ContactUser, RecordStatus} from "@/types/User";
 import {Icon} from "@@/exports";
-import {useUserStore} from "@/stores";
+import {useContactStore, useUserStore} from "@/stores";
 import {shallow} from "zustand/shallow";
 import {useRequest} from "ahooks";
 import {ResCode} from "@/types/APIResponseType";
 import {OutletProps} from "@/layouts";
+import {LoadingOutlined} from "@ant-design/icons";
 const {Text}=Typography
 const {useToken}=theme
 type ItemType = {
@@ -19,8 +20,45 @@ type ItemType = {
 }
 const UserListItem:FC<ItemType> = (props) => {
     const {avatar,title,content,className,user}=props
-
-
+    const {records,uId}=useUserStore(state => ({
+        records:state.requestRecords,
+        uId:state.user.id
+    }),shallow)
+    const checkDetail=()=>{
+        useContactStore.setState({
+            addFriendsDetailVisible:true,
+            curUserDetail:user
+        })
+    }
+    const renderActionButton=()=>{
+        //我是发送者
+        const sRecord = records.find(_record=>_record.uid === uId && _record.fid ===user.id)
+        //该记录存在
+        if (sRecord){
+            //已接受
+            if (sRecord.status === RecordStatus.Accept){
+                //是好友
+                return <Text style={{color:"#52c41a"}}>你们已经是好友了</Text>
+            }
+            if (sRecord.status === RecordStatus.Waiting){
+                return <Text strong={true} type={"secondary"}><LoadingOutlined /> 等待对方处理</Text>
+            }
+        }
+        //我是接收者
+        const rRecord = records.find(_record=>_record.fid === uId && _record.uid ===user.id)
+        //该记录存在
+        if (rRecord){
+            //已接受
+            if (rRecord.status === RecordStatus.Accept){
+                //是好友
+                return <Text style={{color:"#52c41a"}}>你们已经是好友了</Text>
+            }
+            if (rRecord.status === RecordStatus.Waiting){
+                return <Text type={"secondary"} strong={true}>对方已发送请求</Text>
+            }
+        }
+        return  <Button type={"primary"} onClick={checkDetail}>添加</Button>
+    }
     return(
         <StyledUserListItem className={className}>
             <Avatar size={46} src={avatar} />
@@ -29,12 +67,8 @@ const UserListItem:FC<ItemType> = (props) => {
                 <Text className={'second-content'} type={"secondary"}>{content}</Text>
             </div>
             <div className={"actions"}>
-                <Popover
-                    trigger={"click"}
-                    destroyTooltipOnHide={true}
-                    content={<UserForm user={user} />}>
-                    <Button type={"primary"}>添加</Button>
-                </Popover>
+                {renderActionButton()}
+
             </div>
         </StyledUserListItem>
     )
@@ -46,81 +80,6 @@ type FormType = {
     senderDesc:string
     senderRemark:string
     uGroupId:number
-}
-const UserForm:FC<UserFormType>=({user})=>{
-    const {token:{colorPrimary}}=useToken()
-    const {message}=useOutletContext<OutletProps>()
-    const [form]=Form.useForm()
-    const contactGroups=useUserStore(state => state.contactGroups,shallow)
-    const {runAsync:sendRequest,loading}=useRequest(useUserStore.getState().sendFriendsRequest,{
-        manual:true
-    })
-    useLayoutEffect(()=>{
-        form.setFieldsValue({
-            senderRemark:user.nickname,
-            uGroupId:1
-        })
-    },[])
-    const onFinish=async (values:FormType)=>{
-        const res = await sendRequest({
-            senderDesc:values.senderDesc,
-            senderRemark:values.senderRemark,
-            fid:user.id,
-            uGroupId:values.uGroupId
-        })
-        if (res.code === ResCode.success){
-            message.success("请求已发送，等待对方回应")
-        }else{
-            message.error(res.message)
-        }
-    }
-    return (
-        <StyledUserInfo>
-            <div className={'content-avatar'}>
-                <Avatar size={120} src={user.avatar} />
-            </div>
-            <Space direction={"vertical"}  style={{width:"100%"}}>
-                <Text strong={true} style={{fontSize:18}}>{user.nickname}</Text>
-                <Descriptions size={"small"} column={1} bordered={true}>
-                    <Descriptions.Item label="DM"><Text strong={true} style={{color:colorPrimary}}>{user.dm}</Text></Descriptions.Item>
-                    <Descriptions.Item label="用户名">{user.username}</Descriptions.Item>
-                    <Descriptions.Item label="邮箱">{user.email}</Descriptions.Item>
-                    <Descriptions.Item label="简介">{user.sign ??<Text type={"secondary"}>暂无~</Text>}</Descriptions.Item>
-                </Descriptions>
-                <Form
-                    form={form}
-                    disabled={loading}
-                    onFinish={onFinish}>
-                    <Form.Item
-                        name={"senderDesc"}
-                        label={"申请"}>
-                        <Input.TextArea placeholder={"申请说明"}autoSize={{ minRows: 3, maxRows: 3 }} />
-                    </Form.Item>
-                    <Form.Item
-                        name={"senderRemark"}
-                        label={"备注"}>
-                        <Input placeholder={"备注~"} />
-                    </Form.Item>
-                    <Form.Item
-                        name={"uGroupId"}
-                        label={"分组"}>
-                        <Select placeholder={"分组"} suffixIcon={<Icon icon={"ic:round-keyboard-arrow-down"} className={"anticon"} style={{fontSize:19}} />}>
-                            {contactGroups.map(group=>{
-                                return(
-                                    <Select.Option key={group.id} value={group.id} >
-                                        {group.label}
-                                    </Select.Option>
-                                )
-                            })}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item noStyle={true}>
-                        <Button loading={loading} htmlType={"submit"} type={"primary"} block={true}>发送申请</Button>
-                    </Form.Item>
-                </Form>
-            </Space>
-        </StyledUserInfo>
-    )
 }
 const StyledUserListItem = styled.div`
   display: flex;
@@ -135,12 +94,6 @@ const StyledUserListItem = styled.div`
     .second-content{
       display: block;
     }
-  }
-`
-const StyledUserInfo = styled.div`
-  width: 250px;
-  .content-avatar{
-    text-align: center;
   }
 `
 export default UserListItem

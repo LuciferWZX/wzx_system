@@ -56,3 +56,27 @@ export type BanType = {
     banded:boolean
     deleted:boolean
 }
+export enum DeletedStatus {
+    Nothing = 'nothing', //两人都没删除这条记录
+    UserDeleted = 'user_deleted', //发送者删除这条记录
+    FriendDeleted = 'friend_deleted', //接收者删除这条记录
+    BothDeleted = 'both_deleted', //两人都删除这条记录
+}
+export enum RecordStatus {
+    Accept = 'accept', //接受
+    Reject = 'reject', //拒绝
+    Waiting = 'waiting', //等待处理
+}
+export type RequestRecord = {
+    createDate:string
+    deleted:DeletedStatus
+    fid:number
+    id:number
+    rejectReason:null|string
+    senderDesc:null|string
+    senderRemark:string
+    status:RecordStatus
+    uGroupId:number
+    uid:number
+    updateDate:string
+}

@@ -9,6 +9,7 @@ import {MessageInstance} from "antd/es/message/interface";
 import {NotificationInstance} from "antd/es/notification/interface";
 import {showLoginNotification} from "@/pages/auth/common";
 import {useUserStore} from "@/stores";
+import {handleInitData} from "@/utils/handleInitData";
 const {Text}=Typography
 const useLogin = (messageApi:MessageInstance,notification:NotificationInstance) => {
     const [failedCount, setFailedCount] = useState<number>(0);
@@ -58,6 +59,7 @@ const useLogin = (messageApi:MessageInstance,notification:NotificationInstance) 
         const res2 = await getUserState().profile()
         if (res2.code === ResCode.success){
             messageApi.destroy("login")
+            await handleInitData()
             showLoginNotification(notification,res2.data)
             history.replace("/")
             return

@@ -10,6 +10,7 @@ import {motion} from "framer-motion";
 import {OutletProps} from "@/layouts";
 import {showLoginNotification} from "@/pages/auth/common";
 import {useUserStore} from "@/stores";
+import {handleInitData} from "@/utils/handleInitData";
 const {Text,Link}=Typography
 const {useToken}=theme
 
@@ -40,6 +41,7 @@ const AccountForm:FC = () => {
             const res = await runSwitchProfile(currentAccount.token)
             if (res.code === ResCode.success){
                 message.destroy("switch-account")
+                await handleInitData()
                 showLoginNotification(notification,res.data)
                 history.replace("/")
                 return

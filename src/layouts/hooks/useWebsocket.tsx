@@ -66,7 +66,7 @@ const useWebsocket = (message:MessageInstance) => {
      */
     const initSocket=()=>{
         console.log("[初始化Socket]")
-        const SOCKET_URL ="http://localhost:8001/dm"
+        const SOCKET_URL ="http://localhost:8000/dm"
         const socket = io(SOCKET_URL,{
             transports:["websocket", "polling"],
             auth:{

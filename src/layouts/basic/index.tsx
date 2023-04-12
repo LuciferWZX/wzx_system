@@ -5,6 +5,7 @@ import Header from "@/layouts/basic/header";
 import {motion} from "framer-motion";
 import Slider from "@/layouts/basic/Sider";
 import AddContactModal from "../../modals/addContact";
+import {AddFriendsDetail} from "@/modals";
 const BasicLayout:FC = () => {
     // const {token:{colorBgContainer}}=useToken()
     return(
@@ -21,6 +22,7 @@ const BasicLayout:FC = () => {
                     </Layout>
                 </Layout>
                 <AddContactModal />
+                <AddFriendsDetail />
             </StyledBasicLayout>
     )
 }

@@ -7,6 +7,7 @@ import 'dayjs/locale/zh-cn';
 import {createGlobalStyle, history} from "umi"
 import {ResCode} from "@/types/APIResponseType";
 import {useUserStore} from "@/stores";
+import {handleInitData} from "@/utils/handleInitData";
 
 export const getInitialState = async ()=>{
     console.log("[初始化数据：开始]")
@@ -56,9 +57,5 @@ const initUser=async ()=>{
         return
     }
     //初始化用户的一些数据
-    const results =await Promise.all([
-        getUserState().getContactGroups(),
-        getUserState().getContactRecords(),
-    ])
-    console.log(111,results)
+    await handleInitData()
 }

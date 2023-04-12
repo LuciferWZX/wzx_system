@@ -35,6 +35,7 @@ const AddContactModal:FC = () => {
             destroyOnClose={true}
             afterClose={afterClose}
             onCancel={onCancel}
+            footer={null}
             title={"添加好友"}>
             <StyledActionHeader>
                 <Input onChange={(e)=>changeQueryStr(e.target.value)} placeholder={"请输入 昵称/用户名/邮箱/手机号码/dm"} allowClear={true} />

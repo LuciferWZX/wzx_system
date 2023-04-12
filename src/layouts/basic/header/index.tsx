@@ -56,7 +56,7 @@ const Header:FC = () => {
     ]
     return(
         <StyledHeader style={{backgroundColor:colorBgContainer}}>
-            <div>xxxx</div>
+            <div></div>
             <Dropdown trigger={["click"]} menu={{ items }}>
                 <AvatarBox >
                     <Space >

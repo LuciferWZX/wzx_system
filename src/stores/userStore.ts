@@ -1,5 +1,5 @@
 import {create,} from "zustand";
-import {User} from "@/types/User";
+import {RequestRecord, User} from "@/types/User";
 import {ReadyState} from "@/types/Socket";
 import {APIResponseType, ResCode} from "@/types/APIResponseType";
 import {profile} from "@/services/api/auth";
@@ -18,6 +18,7 @@ export type UserStoreProps = {
     readyState:ReadyState
     websocket:Socket|null
     contactGroups:ContactGroup[]
+    requestRecords:RequestRecord[]
 }
 type Actions = {
     profile:()=>Promise<APIResponseType<User|null>>
@@ -39,7 +40,8 @@ const initState:UserStoreProps = {
     token:"",
     readyState:ReadyState.Closed,
     websocket:null,
-    contactGroups:[]
+    contactGroups:[],
+    requestRecords:[]
 }
 export const useUserStore = create(subscribeWithSelector<UserStoreProps & Actions>((set,get)=>{
     return {
@@ -73,19 +75,23 @@ export const useUserStore = create(subscribeWithSelector<UserStoreProps & Action
         },
         getContactRecords:async ()=>{
             const res = await getContactRecords()
-            console.log(res)
+            if (res.code === ResCode.success){
+                set({
+                    requestRecords:res.data
+                })
+            }
             return res
         },
         sendFriendsRequest:async (params)=>{
             const res = await sendFriendsRequest(params)
-            console.log(111,res)
             return res
         },
         clear:()=>{
             set({
                 token:"",
                 user:null,
-                contactGroups:[]
+                contactGroups:[],
+                requestRecords:[]
             })
         }
     }

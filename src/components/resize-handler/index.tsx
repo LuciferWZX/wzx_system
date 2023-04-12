@@ -1,15 +1,18 @@
 import {FC, useState} from "react";
 import {styled} from "umi";
 import {PanelResizeHandle} from "react-resizable-panels";
-import ResizeSVG from "@/assets/svgs/arrows-resize-h.svg"
+import {theme} from "antd"
+
+const {useToken}=theme
 const ResizeHandler:FC = () => {
+    const {token:{colorPrimaryBorderHover}}=useToken()
     const [isDragging, setDragging] = useState<boolean>(false);
     const onDragging=(isDragging:boolean)=>{
         setDragging(isDragging)
     }
     return(
         <StyledResizeHandler onDragging={onDragging}>
-            <StyledHighLight $isDragging={isDragging}/>
+            <StyledHighLight $isDragging={isDragging} $bgColor={colorPrimaryBorderHover}/>
         </StyledResizeHandler>
     )
 }
@@ -18,15 +21,15 @@ const StyledResizeHandler = styled(PanelResizeHandle)`
     position: relative;
     width: 0;
 `
-const StyledHighLight = styled.div<{$isDragging:boolean}>`
+const StyledHighLight = styled.div<{$isDragging:boolean,$bgColor:string}>`
   position: absolute;
   height: 100%;
     width: 2px;
   transition-duration: 0.1s;
   transition-property: background-color;
-  background-color: ${props=>props.$isDragging?"orange":"transparent"};
+  background-color: ${props=>props.$isDragging?props.$bgColor:"transparent"};
   &:hover{
-    background-color: orange;
+    background-color: ${props=>props.$bgColor};
   }
     
 `
