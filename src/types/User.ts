@@ -36,3 +36,23 @@ export interface User {
     authority:   Authority;
     platform:    PlatformType;
 }
+export type ContactUser = {
+    id:number,
+    dm:string
+    username:string
+    nickname:string
+    phone:null|string
+    email:string
+    avatar:string
+    sign:null|string
+    ban:BanType|null
+}
+export type BanType = {
+    id:number
+    uId:number
+    createDate:string
+    updateDate:string
+    reason:string
+    banded:boolean
+    deleted:boolean
+}

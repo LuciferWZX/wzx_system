@@ -1,23 +1,35 @@
 import {create,} from "zustand";
 import {User} from "@/types/User";
 import {ReadyState} from "@/types/Socket";
-import {APIResponseType} from "@/types/APIResponseType";
+import {APIResponseType, ResCode} from "@/types/APIResponseType";
 import {profile} from "@/services/api/auth";
-import {devtools, subscribeWithSelector} from "zustand/middleware";
+import {subscribeWithSelector} from "zustand/middleware";
 import {Socket} from "socket.io-client";
 import {delay} from "@/utils/delay";
 import store from "storejs";
 import {StoreKey} from "@/types/StoreKey";
+import {ContactGroup} from "@/types/ContactGroup";
+import {getContactGroups} from "@/services/api/user";
+import {getContactRecords, sendFriendsRequest} from "@/services/api/friends";
 
 export type UserStoreProps = {
     user:User|null,
     token:string
     readyState:ReadyState
     websocket:Socket|null
+    contactGroups:ContactGroup[]
 }
 type Actions = {
     profile:()=>Promise<APIResponseType<User|null>>
+    getContactGroups:()=>Promise<APIResponseType<ContactGroup[]>>
     switchProfile:(token:string)=>Promise<APIResponseType<User|null>>
+    sendFriendsRequest:(params:{
+        fid:number
+        uGroupId:number
+        senderRemark:string
+        senderDesc:string
+    })=>Promise<any>
+    getContactRecords:()=>Promise<any>
     // login:(params:{type:"password"|"verifyCode",way:string,value:string})=>Promise<void>
     clear:()=>void
 }
@@ -26,7 +38,8 @@ const initState:UserStoreProps = {
     user:null,
     token:"",
     readyState:ReadyState.Closed,
-    websocket:null
+    websocket:null,
+    contactGroups:[]
 }
 export const useUserStore = create(subscribeWithSelector<UserStoreProps & Actions>((set,get)=>{
     return {
@@ -49,10 +62,30 @@ export const useUserStore = create(subscribeWithSelector<UserStoreProps & Action
             }
             return res
         },
+        getContactGroups:async ()=>{
+            const res = await getContactGroups()
+            if (res.code === ResCode.success){
+                set({
+                    contactGroups:res.data
+                })
+            }
+            return res
+        },
+        getContactRecords:async ()=>{
+            const res = await getContactRecords()
+            console.log(res)
+            return res
+        },
+        sendFriendsRequest:async (params)=>{
+            const res = await sendFriendsRequest(params)
+            console.log(111,res)
+            return res
+        },
         clear:()=>{
             set({
                 token:"",
-                user:null
+                user:null,
+                contactGroups:[]
             })
         }
     }
@@ -79,7 +112,4 @@ useUserStore.subscribe(state=>state.user,(user)=>{
         return
     }
 })
-// const unsub2 = useUserStore.subscribe((state) => state.token,()=>{
-//     console.log(1111)
-// })
 

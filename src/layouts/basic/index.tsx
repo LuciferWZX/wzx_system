@@ -4,6 +4,7 @@ import {Layout} from "antd";
 import Header from "@/layouts/basic/header";
 import {motion} from "framer-motion";
 import Slider from "@/layouts/basic/Sider";
+import AddContactModal from "../../modals/addContact";
 const BasicLayout:FC = () => {
     // const {token:{colorBgContainer}}=useToken()
     return(
@@ -15,12 +16,11 @@ const BasicLayout:FC = () => {
                     <Layout>
                         <Header/>
                         <Layout.Content>
-                            BasicLayout
                             <Outlet/>
                         </Layout.Content>
                     </Layout>
                 </Layout>
-
+                <AddContactModal />
             </StyledBasicLayout>
     )
 }

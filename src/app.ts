@@ -53,5 +53,12 @@ const initUser=async ()=>{
     if (res.code!== ResCode.success){
         setUserState({user:null})
         history.replace("/auth/login")
+        return
     }
+    //初始化用户的一些数据
+    const results =await Promise.all([
+        getUserState().getContactGroups(),
+        getUserState().getContactRecords(),
+    ])
+    console.log(111,results)
 }

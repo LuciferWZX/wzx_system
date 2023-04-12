@@ -44,5 +44,8 @@ const StyledSlider = styled(Layout.Sider)`
   .slider-menu{
     flex: 1;
   }
-  //border-right: 1px solid rgba(5, 5, 5, 0.06);
+  border-right: 1px solid rgba(5, 5, 5, 0.06);
+  .ant-menu-light.ant-menu-root.ant-menu-vertical{
+    border-inline-end: unset;
+  }
 `

@@ -78,6 +78,7 @@ const StyledHeader = styled(Layout.Header)`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 1;
 `
 const AvatarBox = styled.div`
   

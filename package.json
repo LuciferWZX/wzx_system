@@ -14,7 +14,9 @@
     "antd": "^5.3.3",
     "dayjs": "^1.11.7",
     "framer-motion": "^10.10.0",
+    "mac-scrollbar": "^0.10.6",
     "react-lottie-player": "^1.5.4",
+    "react-resizable-panels": "^0.0.39",
     "socket.io-client": "^4.6.1",
     "storejs": "^2.0.2",
     "styled-components": "^5.3.9",
@@ -32,12 +34,12 @@
     "@iconify-json/ion": "1.1.9",
     "@iconify-json/material-symbols": "1.1.36",
     "@iconify-json/mdi": "1.1.50",
+    "@iconify-json/mingcute": "1.1.5",
+    "@iconify-json/ph": "1.1.5",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@umijs/plugins": "^4.0.63",
-    "typescript": "^5.0.0",
-    "@iconify-json/mingcute": "1.1.5",
-    "@iconify-json/ph": "1.1.5"
+    "typescript": "^5.0.0"
   }
 }
