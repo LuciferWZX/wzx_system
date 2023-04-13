@@ -76,6 +76,8 @@ export type RequestRecord = {
     senderDesc:null|string
     senderRemark:string
     status:RecordStatus
+    sProfile:User,
+    rProfile:User,
     uGroupId:number
     uid:number
     updateDate:string

@@ -1,5 +1,5 @@
 import {create,} from "zustand";
-import {RequestRecord, User} from "@/types/User";
+import {RecordStatus, RequestRecord, User} from "@/types/User";
 import {ReadyState} from "@/types/Socket";
 import {APIResponseType, ResCode} from "@/types/APIResponseType";
 import {profile} from "@/services/api/auth";
@@ -11,6 +11,8 @@ import {StoreKey} from "@/types/StoreKey";
 import {ContactGroup} from "@/types/ContactGroup";
 import {getContactGroups} from "@/services/api/user";
 import {getContactRecords, sendFriendsRequest} from "@/services/api/friends";
+import {message} from "antd";
+import {useContactStore} from "@/stores/contactStore";
 
 export type UserStoreProps = {
     user:User|null,
@@ -84,6 +86,10 @@ export const useUserStore = create(subscribeWithSelector<UserStoreProps & Action
         },
         sendFriendsRequest:async (params)=>{
             const res = await sendFriendsRequest(params)
+            if (res.code === ResCode.success){
+                //刷新记录列表
+                await get().getContactRecords()
+            }
             return res
         },
         clear:()=>{
@@ -93,6 +99,7 @@ export const useUserStore = create(subscribeWithSelector<UserStoreProps & Action
                 contactGroups:[],
                 requestRecords:[]
             })
+            message.destroy()
         }
     }
 }))
@@ -117,5 +124,13 @@ useUserStore.subscribe(state=>state.user,(user)=>{
         store.set(StoreKey.CurrentUserId,user.id)
         return
     }
+})
+
+useUserStore.subscribe(state => state.requestRecords,(requestRecords)=>{
+    const {user}=useUserStore.getState()
+    const unHandleRecords= requestRecords.filter(record=>record.fid === user.id && record.status===RecordStatus.Waiting)
+    useContactStore.setState({
+        unHandleRequestNum:unHandleRecords.length
+    })
 })
 

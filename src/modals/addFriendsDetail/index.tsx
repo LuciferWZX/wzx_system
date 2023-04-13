@@ -44,6 +44,7 @@ const AddFriendsDetailModal:FC = () => {
         })
         if (res.code === ResCode.success){
             message.success("请求已发送，等待对方回应")
+            onCancel()
         }else{
             message.error(res.message)
         }

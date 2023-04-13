@@ -35,7 +35,8 @@ export default defineConfig({
         "clarity:switch-line",
         "material-symbols:close-rounded",
         "mingcute:contacts-fill",
-        "ph:wechat-logo-duotone"
+        "ph:wechat-logo-duotone",
+        "ep:close-bold"
     ]
   },
   // valtio:{},

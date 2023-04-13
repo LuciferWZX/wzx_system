@@ -1,6 +1,5 @@
 import {useLayoutEffect, useState} from "react";
 import {io, Socket} from "socket.io-client";
-// import userStore from "@/stores/user.store";
 import {SocketChannel} from "@/types/SocketChannel";
 import {MsgType} from "@/types/MsgType";
 import {MessagePayloadType, ReadyState} from "@/types/Socket";
@@ -66,7 +65,7 @@ const useWebsocket = (message:MessageInstance) => {
      */
     const initSocket=()=>{
         console.log("[初始化Socket]")
-        const SOCKET_URL ="http://localhost:8000/dm"
+        const SOCKET_URL =require("../../../config/config.json").socket.url
         const socket = io(SOCKET_URL,{
             transports:["websocket", "polling"],
             auth:{
@@ -135,6 +134,7 @@ const useWebsocket = (message:MessageInstance) => {
     const userEvents=(socket:Socket)=>{
         if (user){
             socket.on(`${SocketChannel.Message}-${user.id}`,receiveMsg)
+            socket.on(`update-friends-records`,updateContactRecords)
         }
     }
     const receiveMsg=(payload:string)=>{
@@ -160,6 +160,9 @@ const useWebsocket = (message:MessageInstance) => {
         }catch (e){
             console.error(`${SocketChannel.Message}-${user.id} 出错`,e)
         }
+    }
+    const updateContactRecords=(payload:any)=>{
+        console.log("接受到",payload)
     }
 }
 export default useWebsocket

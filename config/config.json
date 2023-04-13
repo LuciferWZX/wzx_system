@@ -1,0 +1,9 @@
+{
+  "proxy": {
+    "api": "http://localhost:3001",
+    "socket": "http://localhost:80"
+  },
+  "socket": {
+    "url": "http://localhost:8001/dm"
+  }
+}
