@@ -8,6 +8,7 @@ import {Typography} from 'antd'
 import {LoadingOutlined} from "@ant-design/icons";
 import {useUserStore} from "@/stores";
 import {shallow} from "zustand/shallow";
+import {RequestRecord} from "@/types/User";
 const {Text}=Typography
 const useWebsocket = (message:MessageInstance) => {
     const [readyState, setReadyState] = useState<ReadyState>(ReadyState.Closed);
@@ -161,8 +162,25 @@ const useWebsocket = (message:MessageInstance) => {
             console.error(`${SocketChannel.Message}-${user.id} 出错`,e)
         }
     }
-    const updateContactRecords=(payload:any)=>{
-        console.log("接受到",payload)
+    const updateContactRecords=async (payload:RequestRecord)=>{
+        console.log("[接受到好友请求的消息:]",payload)
+        //存在就替换，不存在就添加到最前面
+        const {requestRecords}=useUserStore.getState()
+        const isExist = requestRecords.some(_record=>_record.id === payload.id)
+        if (isExist){
+            useUserStore.setState({
+                requestRecords:requestRecords.map(_record=>{
+                    if (_record.id === payload.id){
+                        return payload
+                    }
+                    return _record
+                })
+            })
+            return
+        }
+        useUserStore.setState({
+            requestRecords:[payload].concat(...requestRecords)
+        })
     }
 }
 export default useWebsocket

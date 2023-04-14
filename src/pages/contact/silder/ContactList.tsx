@@ -5,9 +5,10 @@ import {useContactStore, useUserStore} from "@/stores";
 import {shallow} from "zustand/shallow";
 import {CaretRightOutlined, CheckOutlined, LoadingOutlined} from "@ant-design/icons";
 import {RecordStatus, RequestRecord, User} from "@/types/User";
+import {MacScrollbar} from "mac-scrollbar";
 
 const { Panel } = Collapse;
-const {Text}=Typography
+const {Text,Paragraph}=Typography
 const {useToken}=theme
 const ContactList:FC = () => {
     const groups=useUserStore(state => state.contactGroups,shallow)
@@ -37,7 +38,7 @@ const ContactList:FC = () => {
         </StyledContactList>
     )
 }
-const StyledContactList = styled.div`
+const StyledContactList = styled(MacScrollbar)`
   flex: 1;
   .collapse-container{
     border-radius: 0;
@@ -61,7 +62,7 @@ const NewFriendsPanel:FC = () => {
       <div>
           {records.map(record=>{
               return(
-                  <NewFriendsListItem isSelected={false} record={record} key={record.id} />
+                  <NewFriendsListItem record={record} key={record.id} />
               )
           })}
       </div>
@@ -69,9 +70,8 @@ const NewFriendsPanel:FC = () => {
 }
 type NewFriendsListItemType = {
     record:RequestRecord
-    isSelected?:boolean
 }
-const NewFriendsListItem:FC<NewFriendsListItemType> = ({record,isSelected})=>{
+const NewFriendsListItem:FC<NewFriendsListItemType> = ({record})=>{
     const {token:{
         controlItemBgActive,//选中的背景颜色
         controlItemBgHover,//hover的背景颜色
@@ -80,6 +80,7 @@ const NewFriendsListItem:FC<NewFriendsListItemType> = ({record,isSelected})=>{
     const [friend,setFriendInfo]=useState<User|null>(null)
     const [iAmSender, setIAmSender] = useState<boolean>(false)
     const uid = useUserStore(state => state.user?.id,shallow)
+    const selectId = useContactStore(state => state.selectId,shallow)
 
     useLayoutEffect(()=>{
         if (record.uid === uid){
@@ -111,19 +112,25 @@ const NewFriendsListItem:FC<NewFriendsListItemType> = ({record,isSelected})=>{
             </Fragment>
         );
     }
+    const selectRecordItem=()=>{
+        useContactStore.setState({
+            selectId:record.id,
+            selectType:"request"
+        })
+    }
     return(
         <StyledFriendsListItem
-            $selectedBgColor={isSelected?controlItemBgActive:"unset"}
-            $hoverBgColor={isSelected?controlItemBgActiveHover:controlItemBgHover}>
+            onClick={selectRecordItem}
+            $selectedBgColor={selectId===record.id?controlItemBgActive:"unset"}
+            $hoverBgColor={selectId===record.id?controlItemBgActiveHover:controlItemBgHover}>
             <Avatar size={50} src={friend?.avatar} />
             <div className={'item-info'}>
-
                 <div>
                     <Text style={{fontSize:16}} strong={true}>{friend?.nickname}</Text>
                 </div>
                 {(iAmSender && record.senderRemark)?<Tag bordered={false} color="blue">{record.senderRemark}</Tag>:""}
                 <div>
-                    {iAmSender?"我":"对方"} : {record.senderDesc?record.senderDesc:<Text type={"secondary"}>暂无说明</Text>}
+                     {record.senderDesc?<Paragraph ellipsis={{rows:2}} style={{marginBottom:0}}>{iAmSender?"我":"对方"}:{record.senderDesc}</Paragraph>:<Text type={"secondary"}>暂无说明</Text>}
                 </div>
             </div>
             <Space direction={"horizontal"}>

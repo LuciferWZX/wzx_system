@@ -4,6 +4,6 @@
     "socket": "http://localhost:80"
   },
   "socket": {
-    "url": "http://localhost:8001/dm"
+    "url": "http://localhost:8000/dm"
   }
 }

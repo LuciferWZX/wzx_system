@@ -11,11 +11,12 @@ import {OutletProps} from "@/layouts";
 import {showLoginNotification} from "@/pages/auth/common";
 import {useUserStore} from "@/stores";
 import {handleInitData} from "@/utils/handleInitData";
+import {MacScrollbar} from "mac-scrollbar";
 const {Text,Link}=Typography
 const {useToken}=theme
 
 const AccountForm:FC = () => {
-    const {token:{colorTextDisabled}}=useToken()
+    const {token:{colorTextDisabled,controlItemBgHover}}=useToken()
     const {accounts,isOk,switchAccount,updateState}=useAccounts()
     const {runAsync:runSwitchProfile,loading:switchLoading}=useRequest(useUserStore.getState().switchProfile,{manual:true})
     const {message,notification}=useOutletContext<OutletProps>()
@@ -29,7 +30,6 @@ const AccountForm:FC = () => {
     }
     const loginCacheCount=async ()=>{
         if (accounts && accounts.length>0){
-            console.log(1111,accounts)
             const currentAccount = accounts[0]
             message.open({
                 type:"loading",
@@ -65,48 +65,56 @@ const AccountForm:FC = () => {
                 <Text strong={true} className={'title'}>登录</Text>
                 <Text type={"secondary"} className={'desc'}>请选择您的账户</Text>
                 <Space direction={"vertical"} size={44} style={{width:"100%"}}>
-                    <StyledAccountsBox>
-                        <Space direction={"vertical"}>
-                            {accounts.map((account,index)=>{
-                                if (index === 0){
+
+                        <Space
+                            direction={"vertical"}
+                            size={4}
+                            style={{width:"100%"}}>
+                            {accounts?.[0] && (
+                                <AccountBox
+                                    initial={{ opacity: 0,  }}
+                                    animate={{ opacity: 1}}
+                                    transition={{ duration: 0.3 }}
+                                    key={accounts[0].id}
+
+                                >
+                                    <Space>
+                                        <Avatar size={66} src={accounts[0].avatar} />
+                                        <div className={'welcome'}>
+
+                                            <Text disabled={accounts[0].error} type={"secondary"}>欢迎回来，</Text>
+                                            <Text  disabled={accounts[0].error}>{accounts[0].nickname}</Text>
+                                        </div>
+                                    </Space>
+                                </AccountBox>
+                            )}
+                            <StyledAccountsBox>
+                                {accounts.map((account,index)=>{
+                                    if (index === 0){
+                                        return null
+                                    }
                                     return(
                                         <AccountBox
+                                            // whileHover={{ scale: 1.1 }}
                                             initial={{ opacity: 0, scale: 0.5 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             transition={{ duration: 0.3 }}
-                                            key={account.id}>
-                                            <Space>
-                                                <Avatar size={66} src={account.avatar} />
-                                                <div className={'welcome'}>
-
-                                                    <Text disabled={account.error} type={"secondary"}>欢迎回来，</Text>
-                                                    <Text  disabled={account.error}>{account.nickname}</Text>
+                                            key={account.id}
+                                            $hoverBgColor={controlItemBgHover}
+                                            style={{cursor:'pointer'}}>
+                                            <div className={"other-account"}>
+                                                <Avatar size={40} src={account.avatar} />
+                                                <div className={'normal-list'}>
+                                                    <Text disabled={account.error}  strong={true}>{account.nickname}</Text>
                                                 </div>
-                                            </Space>
+                                                <Button className={'switch-btn'} disabled={switchLoading || account.error} onClick={()=>switchAccount(account.id)} type={"link"} icon={<Icon className={"anticon"} icon={"clarity:switch-line"} />}>切换</Button>
+                                            </div>
                                         </AccountBox>
                                     )
-                                }
-                                return(
-                                    <AccountBox
-                                        whileHover={{ scale: 1.1 }}
-                                        initial={{ opacity: 0, scale: 0.5 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.3 }}
-                                        key={account.id}
-                                        style={{cursor:'pointer'}}>
-                                        <Space>
-                                            <Avatar size={40} src={account.avatar} />
-                                            <div className={'normal-list'}>
-                                                <Text disabled={account.error}  strong={true}>{account.nickname}</Text>
-                                            </div>
-                                            <Button disabled={switchLoading || account.error} onClick={()=>switchAccount(account.id)} type={"link"} icon={<Icon className={"anticon"} icon={"clarity:switch-line"} />}>切换</Button>
-                                        </Space>
-                                    </AccountBox>
-                                )
-                            })}
-
+                                })}
+                            </StyledAccountsBox>
                         </Space>
-                    </StyledAccountsBox>
+
                     <Row align="middle">
                         <Col span={10}>
                             <Link onClick={()=>history.replace("/auth/login")}>登录其他账号</Link>
@@ -144,16 +152,34 @@ const StyledAccountForm = styled(motion.div)`
     line-height: 24px;
   }
 `
-const StyledAccountsBox = styled.div`
-    max-height: 300px;
+const StyledAccountsBox = styled(MacScrollbar)`
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: inherit;
 `
-const AccountBox = styled(motion.div)`
+const AccountBox = styled(motion.div)<{$hoverBgColor?:string}>`
+  border-radius: 6px;
+  padding: 5px;
+  &:hover{
+    background-color: ${({$hoverBgColor})=>$hoverBgColor};
+  }
+  
     .welcome{
       font-weight: 500;
       font-size: 18px;
     }
+  .other-account{
+    display: flex;
+    justify-content: center;
+   
+  }
   .normal-list{
-    
+      flex: 1;
+      align-self: center;
+    margin: 0 10px;
+  }
+  .switch-btn{
+    align-self: center;
   }
 `
 export default AccountForm
