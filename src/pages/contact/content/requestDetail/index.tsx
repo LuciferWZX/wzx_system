@@ -66,16 +66,20 @@ const RequestDetailPage:FC = () => {
         )
     }
     const renderFooter=()=>{
-        if (record.creatorId !== record.fid){
-            return <Text strong={true} type={"secondary"}><LoadingOutlined /> 等待对方处理</Text>
-        }
+        let text = ""
+
         if (record.status === RecordStatus.Accept){
-            return <Text strong={true} style={{color:colorSuccess}}>已同意</Text>
+            text = record.creatorId === record.fid?"对方已同意":"已同意"
+            return <Text strong={true} style={{color:colorSuccess}}>{text}</Text>
         }
         if (record.status === RecordStatus.Reject){
-            return <Text strong={true} style={{color:colorError}}>已拒绝</Text>
+            text = record.creatorId === record.fid?"对方已拒绝":"已拒绝"
+            return <Text strong={true} style={{color:colorError}}>{text}</Text>
         }
         if (record.status === RecordStatus.Waiting){
+            if (record.creatorId !== record.fid){
+                return <Text strong={true} type={"secondary"}><LoadingOutlined /> 等待对方处理</Text>
+            }
             return  (
                 <Space>
                     <Button disabled={handleRecordLoading} onClick={openConfirm} type={"text"} danger={true} >拒绝</Button>
@@ -95,7 +99,7 @@ const RequestDetailPage:FC = () => {
                         extendData={[
                             {
                                 id:"senderDesc",
-                                label:"对方",
+                                label:record.creatorId!==record.fid?"我":"对方",
                                 value:record?.senderDesc?record.senderDesc:<Text type={"secondary"}>暂无~</Text>
                             },
                             record.status!==RecordStatus.Reject && {

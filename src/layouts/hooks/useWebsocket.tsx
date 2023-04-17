@@ -187,8 +187,17 @@ const useWebsocket = (message:MessageInstance) => {
             requestRecords:[payload].concat(...requestRecords)
         })
     }
+    /**
+     * 对方同意或者拒绝
+     * @param payload
+     */
     const updateContactRecordStatus=async (payload)=>{
         console.log("[对方处理了你的请求]",payload)
+        const {getState:getUserState}=useUserStore
+        await Promise.all([
+            getUserState().getContactRecords(),//获取新朋友列表
+            getUserState().getContacts(),//获取联系人列表
+        ])
     }
 }
 export default useWebsocket
