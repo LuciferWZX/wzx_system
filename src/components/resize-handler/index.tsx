@@ -5,13 +5,13 @@ import {theme} from "antd"
 
 const {useToken}=theme
 const ResizeHandler:FC = () => {
-    const {token:{colorPrimaryBorderHover}}=useToken()
+    const {token:{colorPrimaryBorderHover,colorBorder}}=useToken()
     const [isDragging, setDragging] = useState<boolean>(false);
     const onDragging=(isDragging:boolean)=>{
         setDragging(isDragging)
     }
     return(
-        <StyledResizeHandler onDragging={onDragging}>
+        <StyledResizeHandler onDragging={onDragging} style={{backgroundColor:colorBorder}}>
             <StyledHighLight $isDragging={isDragging} $bgColor={colorPrimaryBorderHover}/>
         </StyledResizeHandler>
     )
@@ -19,7 +19,7 @@ const ResizeHandler:FC = () => {
 export default ResizeHandler
 const StyledResizeHandler = styled(PanelResizeHandle)`
     position: relative;
-    width: 0;
+    width: 1px;
 `
 const StyledHighLight = styled.div<{$isDragging:boolean,$bgColor:string}>`
   position: absolute;

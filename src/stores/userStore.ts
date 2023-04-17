@@ -1,5 +1,5 @@
 import {create,} from "zustand";
-import {RecordStatus, RequestRecord, User} from "@/types/User";
+import {RecordStatus, User} from "@/types/User";
 import {ReadyState} from "@/types/Socket";
 import {APIResponseType, ResCode} from "@/types/APIResponseType";
 import {profile} from "@/services/api/auth";
@@ -10,9 +10,11 @@ import store from "storejs";
 import {StoreKey} from "@/types/StoreKey";
 import {ContactGroup} from "@/types/ContactGroup";
 import {getContactGroups} from "@/services/api/user";
-import {getContactRecords, sendFriendsRequest} from "@/services/api/friends";
+import {getContactRecords, getContacts, sendFriendsRequest} from "@/services/api/friends";
 import {message} from "antd";
 import {useContactStore} from "@/stores/contactStore";
+import {RequestRecord} from "@/types/friends/RequestRecord";
+import {Contact} from "@/types/friends/Contact";
 
 export type UserStoreProps = {
     user:User|null,
@@ -21,6 +23,7 @@ export type UserStoreProps = {
     websocket:Socket|null
     contactGroups:ContactGroup[]
     requestRecords:RequestRecord[]
+    contacts:Contact[]
 }
 type Actions = {
     profile:()=>Promise<APIResponseType<User|null>>
@@ -33,6 +36,7 @@ type Actions = {
         senderDesc:string
     })=>Promise<any>
     getContactRecords:()=>Promise<any>
+    getContacts:()=>Promise<any>
     // login:(params:{type:"password"|"verifyCode",way:string,value:string})=>Promise<void>
     clear:()=>void
 }
@@ -42,6 +46,7 @@ const initState:UserStoreProps = {
     token:"",
     readyState:ReadyState.Closed,
     websocket:null,
+    contacts:[],
     contactGroups:[],
     requestRecords:[]
 }
@@ -92,6 +97,14 @@ export const useUserStore = create(subscribeWithSelector<UserStoreProps & Action
             }
             return res
         },
+        getContacts:async ()=>{
+            const res = await getContacts();
+            if (res.code === ResCode.success){
+                set({
+                    contacts:res.data
+                })
+            }
+        },
         clear:()=>{
             set({
                 token:"",
@@ -127,8 +140,7 @@ useUserStore.subscribe(state=>state.user,(user)=>{
 })
 
 useUserStore.subscribe(state => state.requestRecords,(requestRecords)=>{
-    const {user}=useUserStore.getState()
-    const unHandleRecords= requestRecords.filter(record=>record.fid === user.id && record.status===RecordStatus.Waiting)
+    const unHandleRecords= requestRecords.filter(record=>record.creatorId === record.fid && record.status===RecordStatus.Waiting)
     useContactStore.setState({
         unHandleRequestNum:unHandleRecords.length
     })

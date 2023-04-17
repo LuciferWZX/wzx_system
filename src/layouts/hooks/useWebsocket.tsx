@@ -8,7 +8,7 @@ import {Typography} from 'antd'
 import {LoadingOutlined} from "@ant-design/icons";
 import {useUserStore} from "@/stores";
 import {shallow} from "zustand/shallow";
-import {RequestRecord} from "@/types/User";
+import {RequestRecord} from "@/types/friends/RequestRecord";
 const {Text}=Typography
 const useWebsocket = (message:MessageInstance) => {
     const [readyState, setReadyState] = useState<ReadyState>(ReadyState.Closed);
@@ -136,6 +136,7 @@ const useWebsocket = (message:MessageInstance) => {
         if (user){
             socket.on(`${SocketChannel.Message}-${user.id}`,receiveMsg)
             socket.on(`update-friends-records`,updateContactRecords)
+            socket.on(`friend-record-changed`,updateContactRecordStatus)
         }
     }
     const receiveMsg=(payload:string)=>{
@@ -162,6 +163,10 @@ const useWebsocket = (message:MessageInstance) => {
             console.error(`${SocketChannel.Message}-${user.id} 出错`,e)
         }
     }
+    /**
+     * 添加用户会发送通知
+     * @param payload
+     */
     const updateContactRecords=async (payload:RequestRecord)=>{
         console.log("[接受到好友请求的消息:]",payload)
         //存在就替换，不存在就添加到最前面
@@ -181,6 +186,9 @@ const useWebsocket = (message:MessageInstance) => {
         useUserStore.setState({
             requestRecords:[payload].concat(...requestRecords)
         })
+    }
+    const updateContactRecordStatus=async (payload)=>{
+        console.log("[对方处理了你的请求]",payload)
     }
 }
 export default useWebsocket

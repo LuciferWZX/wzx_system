@@ -6,8 +6,12 @@ import {motion} from "framer-motion";
 import Slider from "@/layouts/basic/Sider";
 import AddContactModal from "../../modals/addContact";
 import {AddFriendsDetail} from "@/modals";
+import {useOutletContext} from "@@/exports";
+import {OutletProps} from "@/layouts";
 const BasicLayout:FC = () => {
     // const {token:{colorBgContainer}}=useToken()
+    const outletContext=useOutletContext<OutletProps>()
+
     return(
             <StyledBasicLayout
                 initial={{ opacity: 0 }}
@@ -17,7 +21,7 @@ const BasicLayout:FC = () => {
                     <Layout>
                         <Header/>
                         <Layout.Content>
-                            <Outlet/>
+                            <Outlet context={outletContext}/>
                         </Layout.Content>
                     </Layout>
                 </Layout>

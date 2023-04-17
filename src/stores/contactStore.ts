@@ -1,6 +1,10 @@
 import {create} from "zustand";
 import {subscribeWithSelector} from "zustand/middleware";
-import {ContactUser} from "@/types/User";
+import {ContactUser, RecordStatus} from "@/types/User";
+import {changeContactRecordsStatus} from "@/services/api/friends";
+import {ResCode} from "@/types/APIResponseType";
+import {useUserStore} from "@/stores/userStore";
+
 type ContactStoreType = {
     filterStr:string //过滤的字符串
     addContactVisible:boolean //添加好友的modal
@@ -11,7 +15,12 @@ type ContactStoreType = {
     selectId:number|null //通讯录左侧选择的item的id
 }
 type Action = {
-
+    changeRecordStatus:(params:{
+        groupId: number;
+        recordId: number;
+        status: RecordStatus.Accept | RecordStatus.Reject;
+        rejectReason?: string;
+    })=>Promise<any>
 }
 const initState:ContactStoreType = {
     filterStr:"",
@@ -24,7 +33,24 @@ const initState:ContactStoreType = {
 }
 export const useContactStore = create(subscribeWithSelector<ContactStoreType & Action>((set)=>{
     return {
-        ...initState
+        ...initState,
+        changeRecordStatus:async (params)=>{
+            const res = await changeContactRecordsStatus(params)
+            if (res.code === ResCode.success){
+                //成功了刷新数据【新朋友，好友列表】
+                const {getContactRecords,getContacts}=useUserStore.getState()
+                if (params.status === RecordStatus.Accept){
+                    await Promise.all([
+                        getContactRecords(), //新朋友列表
+                        getContacts(),//联系人列表
+                    ])
+                }else{
+                    await Promise.all([
+                        getContactRecords(), //新朋友列表
+                    ])
+                }
+            }
+        }
     }
 }))
 useContactStore.subscribe(state => state.filterStr,(filter)=>{

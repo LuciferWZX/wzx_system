@@ -5,7 +5,7 @@ import ContactList from "@/pages/contact/silder/ContactList";
 import {theme} from 'antd'
 const {useToken}=theme
 const ContactSlider:FC = () => {
-    const {token:{colorBgContainer}}=useToken()
+    const {token:{colorBgContainer,colorBorder}}=useToken()
     return(
         <StyledContactSlider style={{backgroundColor:colorBgContainer}}>
             <ActionHeader />

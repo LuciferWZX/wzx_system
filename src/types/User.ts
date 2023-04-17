@@ -67,18 +67,3 @@ export enum RecordStatus {
     Reject = 'reject', //拒绝
     Waiting = 'waiting', //等待处理
 }
-export type RequestRecord = {
-    createDate:string
-    deleted:DeletedStatus
-    fid:number
-    id:number
-    rejectReason:null|string
-    senderDesc:null|string
-    senderRemark:string
-    status:RecordStatus
-    sProfile:User,
-    rProfile:User,
-    uGroupId:number
-    uid:number
-    updateDate:string
-}

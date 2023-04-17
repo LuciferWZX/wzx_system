@@ -8,7 +8,7 @@ import {ResizeHandler} from "@/components";
 const ContactPage = () => {
     return(
         <StyledPanelGroup direction={"horizontal"}>
-            <Panel defaultSize={25} style={{minWidth:280,maxWidth:380}}>
+            <Panel defaultSize={25} maxSize={28} minSize={25}>
                 <ContactSlider />
             </Panel>
             <ResizeHandler />

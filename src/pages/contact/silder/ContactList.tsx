@@ -1,17 +1,19 @@
-import React, {FC, Fragment, useLayoutEffect, useState} from "react";
-import {Icon, styled} from "umi";
-import {Avatar, Badge, Button, Collapse, Space, Tag, theme, Typography} from "antd";
+import React, {FC, useLayoutEffect, useState} from "react";
+import {styled} from "umi";
+import {Avatar, Badge, Collapse, Space, Tag, theme, Typography} from "antd";
 import {useContactStore, useUserStore} from "@/stores";
 import {shallow} from "zustand/shallow";
-import {CaretRightOutlined, CheckOutlined, LoadingOutlined} from "@ant-design/icons";
-import {RecordStatus, RequestRecord, User} from "@/types/User";
+import {CaretRightOutlined} from "@ant-design/icons";
+import {ContactUser, RecordStatus} from "@/types/User";
 import {MacScrollbar} from "mac-scrollbar";
+import {RequestRecord} from "@/types/friends/RequestRecord";
 
 const { Panel } = Collapse;
-const {Text,Paragraph}=Typography
+const {Text,Paragraph,Link}=Typography
 const {useToken}=theme
 const ContactList:FC = () => {
     const groups=useUserStore(state => state.contactGroups,shallow)
+    const contacts=useUserStore(state => state.contacts,shallow)
     const {unHandleRequestNum}=useContactStore(state => ({
         unHandleRequestNum:state.unHandleRequestNum
     }),shallow)
@@ -26,11 +28,18 @@ const ContactList:FC = () => {
                     <NewFriendsPanel />
                 </Panel>
                 {groups.map(group=>{
+                    const contactList = contacts.filter(_contact=>_contact.groupId === group.id)
                     return (
                         <Panel
                             key={group.id}
-                            header={group.label}>
-                            <p>xxx</p>
+                            header={<div>{group.label} <Link>{contactList.length}</Link></div>}>
+                            {contactList.map(_contact=>{
+                                return(
+                                    <div key={_contact.fid}>
+                                        {_contact.friendInfo.nickname}
+                                    </div>
+                                )
+                            })}
                         </Panel>
                     )
                 })}
@@ -77,21 +86,20 @@ const NewFriendsListItem:FC<NewFriendsListItemType> = ({record})=>{
         controlItemBgHover,//hover的背景颜色
         controlItemBgActiveHover,//已经选中了的hover颜色
     }}=useToken()
-    const [friend,setFriendInfo]=useState<User|null>(null)
+    const [friend,setFriendInfo]=useState<ContactUser|null>(null)
     const [iAmSender, setIAmSender] = useState<boolean>(false)
     const uid = useUserStore(state => state.user?.id,shallow)
     const selectId = useContactStore(state => state.selectId,shallow)
 
     useLayoutEffect(()=>{
-        if (record.uid === uid){
+        setFriendInfo(record.friendInfo)
+        if (record.creatorId === uid){
             //我是发送者
-            setFriendInfo(record.rProfile)
             setIAmSender(true)
             return
         }
-        if(record.fid === uid){
+        if(record.creatorId === record.fid){
             //我是接受着
-            setFriendInfo(record.sProfile)
             setIAmSender(false)
             return;
         }
@@ -99,17 +107,17 @@ const NewFriendsListItem:FC<NewFriendsListItemType> = ({record})=>{
     },[])
 
     const renderActions=()=>{
+        if (record.status !== RecordStatus.Waiting){
+            return
+        }
         if (iAmSender){
             if (record.status === RecordStatus.Waiting){
-                return <Text type={"secondary"} strong={true}><LoadingOutlined/> 处理中</Text>
+                return
             }
 
         }
         return(
-            <Fragment>
-                <Button size={"small"} type={"text"} danger={true} icon={<Icon icon={"ep:close-bold"} className={"anticon"} />} />
-                <Button size={"small"} type={"primary"} icon={<CheckOutlined />} />
-            </Fragment>
+            <Badge status={"error"} />
         );
     }
     const selectRecordItem=()=>{
