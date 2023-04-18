@@ -1,12 +1,12 @@
 import React, {FC} from "react";
-import {ContactUser} from "@/types/User";
+import {ContactUser, User} from "@/types/User";
 import {Descriptions, Image, Space,Typography,theme} from "antd";
 import {styled} from "umi";
 
 const {Text}=Typography
 const {useToken}=theme
 type BasicInfoType = {
-    user:ContactUser
+    user:ContactUser |User
     extendData?:Array<{id:any,label:React.ReactNode,value:React.ReactNode}>
 }
 const BasicInfo:FC<BasicInfoType> = (props) => {

@@ -8,7 +8,9 @@ specifiers:
   '@iconify-json/clarity': 1.1.8
   '@iconify-json/ep': 1.1.10
   '@iconify-json/ic': 1.1.13
+  '@iconify-json/icon-park-outline': 1.1.10
   '@iconify-json/ion': 1.1.9
+  '@iconify-json/majesticons': 1.1.7
   '@iconify-json/material-symbols': 1.1.36
   '@iconify-json/mdi': 1.1.50
   '@iconify-json/mingcute': 1.1.5
@@ -57,7 +59,9 @@ devDependencies:
   '@iconify-json/clarity': 1.1.8
   '@iconify-json/ep': 1.1.10
   '@iconify-json/ic': 1.1.13
+  '@iconify-json/icon-park-outline': 1.1.10
   '@iconify-json/ion': 1.1.9
+  '@iconify-json/majesticons': 1.1.7
   '@iconify-json/material-symbols': 1.1.36
   '@iconify-json/mdi': 1.1.50
   '@iconify-json/mingcute': 1.1.5
@@ -2627,8 +2631,20 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
+  /@iconify-json/icon-park-outline/1.1.10:
+    resolution: {integrity: sha512-yi4Ge5dJj6gPCvj5CeG7hjx6xdjmFpn6+YxftSKZx8FQkerTHofD90agMDo8+zYH9FG2CwVM1okLEBkDQn0QBA==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
   /@iconify-json/ion/1.1.9:
     resolution: {integrity: sha512-0LCnmt2DOV9XkKEnDhfOxU2ejZfrNLErczdJ6ONQvqpXoh9yeZIsPa2YILdF6cMuxCRqxVuU8BAdpUrNy+j1ng==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/majesticons/1.1.7:
+    resolution: {integrity: sha512-tIJktXeMjahlwV6V8fNvxYB64bUnrYpUjnb7plWXadLg656NqFBOcz7BsU0HXj6tb4u/0o3t4uKgLxTgzIbUhQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

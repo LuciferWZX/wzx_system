@@ -41,6 +41,8 @@
     "@types/styled-components": "^5.1.26",
     "@umijs/plugins": "^4.0.63",
     "typescript": "^5.0.0",
-    "@iconify-json/ep": "1.1.10"
+    "@iconify-json/ep": "1.1.10",
+    "@iconify-json/icon-park-outline": "1.1.10",
+    "@iconify-json/majesticons": "1.1.7"
   }
 }

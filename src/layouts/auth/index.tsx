@@ -1,19 +1,34 @@
 import React, {FC} from "react"
 import {Outlet,styled} from "umi";
 import {Col, Row,theme} from "antd";
-import LottieAnimation from "@/layouts/auth/LottieAnimation";
+
 import { useOutletContext} from "@@/exports";
 import {OutletProps} from "@/layouts";
+import {LottieAnimation} from "@/components";
+import {LottieProps} from "react-lottie-player";
+import loginJSON from "@/assets/lotties/login_bg.json";
 
 const {useToken}=theme
 const AuthLayout:FC = () => {
     const {token:{colorBgContainer}}=useToken()
     const layoutContext = useOutletContext<OutletProps>();
+    const defaultOptions:LottieProps = {
+        loop: true,
+        animationData: loginJSON,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        },
+        play:true,
+        style:{
+            height:400,
+            width:400
+        }
+    };
     return(
             <StyledAuthLayout>
                 <Row className={'horizon-container'}  align="middle" >
                     <Col className={"logo-container"} flex={2} style={{flex:"2 2"}}>
-                        <LottieAnimation />
+                        <LottieAnimation options={defaultOptions} />
                     </Col>
                     <Col  flex={3} className={'page-container'} style={{backgroundColor:colorBgContainer,flex:"3 3"}}>
                         <Outlet context={layoutContext}/>

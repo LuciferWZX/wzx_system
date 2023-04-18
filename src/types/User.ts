@@ -35,6 +35,8 @@ export interface User {
     updateDate:  string;
     authority:   Authority;
     platform:    PlatformType;
+    sign:string|null
+    ban:BanType
 }
 export type ContactUser = {
     id:number,

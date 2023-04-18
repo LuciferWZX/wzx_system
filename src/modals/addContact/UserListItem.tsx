@@ -32,7 +32,8 @@ const UserListItem:FC<ItemType> = (props) => {
     }
     const renderActionButton=()=>{
         //我是发送者
-        const sRecord = records.find(_record=>_record.uid === uId && _record.fid ===user.id)
+        const sRecord = records.find(_record=>_record.creatorId === uId && _record.fid === user?.id)
+
         //该记录存在
         if (sRecord){
             //已接受
@@ -45,7 +46,7 @@ const UserListItem:FC<ItemType> = (props) => {
             }
         }
         //我是接收者
-        const rRecord = records.find(_record=>_record.fid === uId && _record.uid ===user.id)
+        const rRecord = records.find(_record=>_record.creatorId === user?.id)
         //该记录存在
         if (rRecord){
             //已接受

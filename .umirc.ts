@@ -36,9 +36,12 @@ export default defineConfig({
         "material-symbols:close-rounded",
         "mingcute:contacts-fill",
         "ph:wechat-logo-duotone",
-        "ep:close-bold"
+        "ep:close-bold",
+        "icon-park-outline:female",
+        "icon-park-outline:male",
+        "majesticons:ban"
     ]
   },
   // valtio:{},
-  reactQuery:{}
+  // reactQuery:{}
 });

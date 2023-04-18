@@ -7,6 +7,7 @@ import {CaretRightOutlined} from "@ant-design/icons";
 import {ContactUser, RecordStatus} from "@/types/User";
 import {MacScrollbar} from "mac-scrollbar";
 import {RequestRecord} from "@/types/friends/RequestRecord";
+import ContactListItem from "@/pages/contact/silder/ContactListItem";
 
 const { Panel } = Collapse;
 const {Text,Paragraph,Link}=Typography
@@ -35,9 +36,7 @@ const ContactList:FC = () => {
                             header={<div>{group.label} <Link>{contactList.length}</Link></div>}>
                             {contactList.map(_contact=>{
                                 return(
-                                    <div key={_contact.fid}>
-                                        {_contact.friendInfo.nickname}
-                                    </div>
+                                    <ContactListItem className={'contact-item'} key={_contact.fid} contact={_contact}/>
                                 )
                             })}
                         </Panel>
@@ -60,6 +59,9 @@ const StyledContactList = styled(MacScrollbar)`
   }
   .ant-collapse-content-box{
     padding: 5px!important;
+  }
+  .contact-item:not(:first-child){
+    margin-top: 5px;
   }
 `
 export default ContactList
@@ -92,6 +94,7 @@ const NewFriendsListItem:FC<NewFriendsListItemType> = ({record})=>{
     const selectId = useContactStore(state => state.selectId,shallow)
 
     useLayoutEffect(()=>{
+        console.log(222,record)
         setFriendInfo(record.friendInfo)
         if (record.creatorId === uid){
             //我是发送者
