@@ -8,7 +8,7 @@ import {MacScrollbar} from "mac-scrollbar";
 import ConversationItem from "@/pages/message/slider/ConversationItem";
 const {useToken}=theme
 const MessageSlider:FC = () => {
-    const {token:{colorBgContainer,colorBorder}}=useToken()
+    const {token:{colorBgContainer}}=useToken()
     const conversations = useMessageStore(state => state.conversations,shallow)
     console.log(111,conversations)
     return(

@@ -1,10 +1,7 @@
 import React, {FC} from "react";
-import {styled,Icon} from "umi";
-import {Avatar, Space, Tag, theme, Tooltip, Typography} from "antd";
-import {Contact} from "@/types/friends/Contact";
-import {useContactStore} from "@/stores";
+import {styled} from "umi";
+import {Avatar, theme, Typography} from "antd";
 import {shallow} from "zustand/shallow";
-import {GenderType} from "@/types/User";
 import {Conversation} from "@/types/message/Conversation";
 import {useMessageStore} from "@/stores/messageStore";
 

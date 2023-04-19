@@ -26,7 +26,7 @@ const useMessageStoreBase = create(
             (set,get)=>({
                 ...initialState,
                 clear:()=>{
-                    set((state)=>initialState,true)
+                    set(()=>initialState,true)
                 }
             }),{
                 name:"message"
