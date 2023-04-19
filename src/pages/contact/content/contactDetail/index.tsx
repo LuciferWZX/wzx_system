@@ -1,13 +1,38 @@
 import {FC} from "react";
-import {styled} from "umi";
+import {history, styled} from "umi";
 import BasicInfo from "@/pages/contact/content/BasicInfo";
 import useContact from "@/pages/contact/content/requestDetail/useContact";
 import {Button, Space} from "antd";
+import store from "storejs";
+import {StoreKey} from "@/types/StoreKey";
+import {updateConversations} from "@/utils/handleConversations";
+import {Conversation} from "@/types/message/Conversation";
+import {useMessageStore} from "@/stores/messageStore";
 
 const ContactDetailPage:FC = () => {
     const {friendInfo}=useContact()
-    const makeConversation=()=>{
+    const makeConversation=async ()=>{
         //发消息
+        const conversations:Conversation[] = store.get(StoreKey.Conversations) ?? []
+        if (!conversations.find(_cs=>_cs.fid === friendInfo.id)){
+            //没有就用默认数据填充
+            const conversation:Conversation = {
+                fid: friendInfo.id,
+                friendInfo: friendInfo,
+                noDisturb: false,
+                unRead: 0
+            }
+            await updateConversations(conversation)
+        }
+        useMessageStore.setState({
+            fid:friendInfo.id,
+            groupId:null
+        })
+        //有就直接跳转
+        history.push({
+            pathname:"/message",
+        })
+
     }
     const openDelete=()=>{
 

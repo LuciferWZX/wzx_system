@@ -3,6 +3,7 @@ import {Panel, PanelGroup} from "react-resizable-panels";
 import {ResizeHandler} from "@/components";
 import {styled} from "umi";
 import MessageSlider from "@/pages/message/slider";
+import MessageContent from "@/pages/message/content";
 
 const MessagePage:FC = () => {
     return(
@@ -12,7 +13,7 @@ const MessagePage:FC = () => {
             </Panel>
             <ResizeHandler />
             <Panel>
-
+                <MessageContent/>
             </Panel>
         </StyledPanelGroup>
     )
