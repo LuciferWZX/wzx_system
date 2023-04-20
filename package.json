@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-react": "^1.0.6",
     "ahooks": "^3.7.6",
     "antd": "5.4.2",
     "dayjs": "^1.11.7",
     "framer-motion": "^10.10.0",
+    "hotkeys-js": "^3.10.2",
     "mac-scrollbar": "^0.10.6",
     "react-lottie-player": "^1.5.4",
     "react-resizable-panels": "^0.0.39",
@@ -27,11 +30,15 @@
   },
   "devDependencies": {
     "@iconify-json/ant-design": "1.1.5",
+    "@iconify-json/bi": "1.1.16",
     "@iconify-json/carbon": "1.1.16",
     "@iconify-json/ci": "1.1.9",
     "@iconify-json/clarity": "1.1.8",
+    "@iconify-json/ep": "1.1.10",
     "@iconify-json/ic": "1.1.13",
+    "@iconify-json/icon-park-outline": "1.1.10",
     "@iconify-json/ion": "1.1.9",
+    "@iconify-json/majesticons": "1.1.7",
     "@iconify-json/material-symbols": "1.1.36",
     "@iconify-json/mdi": "1.1.50",
     "@iconify-json/mingcute": "1.1.5",
@@ -40,9 +47,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@umijs/plugins": "^4.0.63",
-    "typescript": "^5.0.0",
-    "@iconify-json/ep": "1.1.10",
-    "@iconify-json/icon-park-outline": "1.1.10",
-    "@iconify-json/majesticons": "1.1.7"
+    "editor": "link:@types/@wangeditor/editor",
+    "typescript": "^5.0.0"
   }
 }

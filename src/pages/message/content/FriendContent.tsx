@@ -1,11 +1,11 @@
 import {FC} from "react";
-import {ChatInput} from "@/components";
+import {WangInput} from "@/components";
 
 const FriendContent:FC = () => {
     return(
         <div>
             friendContent
-            <ChatInput />
+            <WangInput/>
         </div>
     )
 }

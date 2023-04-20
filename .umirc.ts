@@ -39,7 +39,8 @@ export default defineConfig({
         "ep:close-bold",
         "icon-park-outline:female",
         "icon-park-outline:male",
-        "majesticons:ban"
+        "majesticons:ban",
+        "bi:send-fill"
     ]
   },
   // valtio:{},
