@@ -9,7 +9,7 @@ import {ResCode} from "@/types/APIResponseType";
 import {useUserStore} from "@/stores";
 import {handleInitData} from "@/utils/handleInitData";
 import {Boot, IModuleConf} from "@wangeditor/editor";
-import {renderTagConf} from "@/components/wang-input/renderTagElement";
+import {elemToHtmlConf, renderTagConf} from "@/components/wang-input/renderTagElement";
 
 export const getInitialState = async ()=>{
     console.log("[初始化数据：开始]")
@@ -41,8 +41,10 @@ export const styledComponents = {
  * 初始化用户信息
  */
 const initUser=async ()=>{
+    await registerModule()
     const store = require("storejs")
     const token:string|undefined = store.get(StoreKey.Auth)
+
     if (!token){
         console.log("[token不存在]",)
         history.replace("/auth/login")
@@ -60,12 +62,13 @@ const initUser=async ()=>{
     }
     //初始化用户的一些数据
     await handleInitData()
-    await registerModule()
+
 }
 
 const registerModule=()=>{
     const module: Partial<IModuleConf> = {   // TS 语法
-        renderElems: [renderTagConf, /* 其他元素... */] // renderElem
+        renderElems: [renderTagConf], // renderElem
+        elemsToHtml: [elemToHtmlConf]
     }
     Boot.registerModule(module)
 }

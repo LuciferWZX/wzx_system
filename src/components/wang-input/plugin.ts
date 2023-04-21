@@ -1,4 +1,4 @@
-import {IDomEditor} from "@wangeditor/editor";
+import {DomEditor, IDomEditor} from "@wangeditor/editor";
 
 
 export function withTag<T extends IDomEditor>(editor: T):T{
@@ -6,7 +6,7 @@ export function withTag<T extends IDomEditor>(editor: T):T{
     const newEditor = editor
     // 重写 isInline
     newEditor.isInline = elem => {
-        const type = (elem as any)?.type
+        const type = DomEditor.getNodeType(elem)
         if (type === 'tag') {
             return true
         }
@@ -15,7 +15,7 @@ export function withTag<T extends IDomEditor>(editor: T):T{
 
     // 重写 isVoid
     newEditor.isVoid = elem => {
-        const type = (elem as any)?.type
+        const type = DomEditor.getNodeType(elem)
         if (type === 'tag') {
             return true
         }

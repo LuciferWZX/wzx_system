@@ -144,6 +144,7 @@ const WangInput:FC<WangInputType> = (props) => {
                                 value:item.id,
                                 children: [{text:""}]
                             }
+                            editor.restoreSelection()
                             editor.insertNode(node)
                             selectRecommend(key)
                         }
@@ -168,6 +169,7 @@ const StyledWangInput = styled.div<{
   border: 1px solid ${({$colorBorder})=>$colorBorder};
   max-height: 300px;
   position: relative;
+  font-size: 40px;
   .editor{
     
     [data-slate-editor] p{
