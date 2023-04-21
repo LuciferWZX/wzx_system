@@ -8,6 +8,8 @@ import {createGlobalStyle, history} from "umi"
 import {ResCode} from "@/types/APIResponseType";
 import {useUserStore} from "@/stores";
 import {handleInitData} from "@/utils/handleInitData";
+import {Boot, IModuleConf} from "@wangeditor/editor";
+import {renderTagConf} from "@/components/wang-input/renderTagElement";
 
 export const getInitialState = async ()=>{
     console.log("[初始化数据：开始]")
@@ -58,4 +60,12 @@ const initUser=async ()=>{
     }
     //初始化用户的一些数据
     await handleInitData()
+    await registerModule()
+}
+
+const registerModule=()=>{
+    const module: Partial<IModuleConf> = {   // TS 语法
+        renderElems: [renderTagConf, /* 其他元素... */] // renderElem
+    }
+    Boot.registerModule(module)
 }

@@ -24,6 +24,7 @@ specifiers:
   '@wangeditor/editor-for-react': ^1.0.6
   ahooks: ^3.7.6
   antd: 5.4.2
+  caret-pos: ^2.0.0
   dayjs: ^1.11.7
   editor: link:@types/@wangeditor/editor
   framer-motion: ^10.10.0
@@ -31,6 +32,7 @@ specifiers:
   mac-scrollbar: ^0.10.6
   react-lottie-player: ^1.5.4
   react-resizable-panels: ^0.0.39
+  snabbdom: ^3.5.1
   socket.io-client: ^4.6.1
   storejs: ^2.0.2
   styled-components: ^5.3.9
@@ -46,6 +48,7 @@ dependencies:
   '@wangeditor/editor-for-react': 1.0.6_@wangeditor+editor@5.1.23
   ahooks: 3.7.6
   antd: 5.4.2
+  caret-pos: 2.0.0
   dayjs: 1.11.7
   framer-motion: 10.10.0
   hotkeys-js: 3.10.2
@@ -80,6 +83,7 @@ devDependencies:
   '@types/styled-components': 5.1.26
   '@umijs/plugins': 4.0.63_vonxhlkowssp45eryhgnfb2n5y
   editor: link:@types/@wangeditor/editor
+  snabbdom: 3.5.1
   typescript: 5.0.2
 
 packages:
@@ -4837,6 +4841,10 @@ packages:
   /caniuse-lite/1.0.30001472:
     resolution: {integrity: sha512-xWC/0+hHHQgj3/vrKYY0AAzeIUgr7L9wlELIcAvZdDUHlhL/kNxMdnQLOSOQfP8R51ZzPhmHdyMkI0MMpmxCfg==}
 
+  /caret-pos/2.0.0:
+    resolution: {integrity: sha512-cOIiBS1SjzXg+LXSiQAzGg89dHDKq/y4c30+tB5hkVN7GbtXh1BNypOmjti4LwAWQrvP4y+bNG7RJFxLGoL3bA==}
+    dev: false
+
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -9504,7 +9512,6 @@ packages:
   /snabbdom/3.5.1:
     resolution: {integrity: sha512-wHMNIOjkm/YNE5EM3RCbr/+DVgPg6AqQAX1eOxO46zYNvCXjKP5Y865tqQj3EXnaMBjkxmQA5jFuDpDK/dbfiA==}
     engines: {node: '>=8.3.0'}
-    dev: false
 
   /socket.io-client/4.6.1:
     resolution: {integrity: sha512-5UswCV6hpaRsNg5kkEHVcbBIXEYoVbMQaHJBXJCyEQ+CiFPV1NIOY0XOFWG4XR4GZcB8Kn6AsRs/9cy9TbqVMQ==}

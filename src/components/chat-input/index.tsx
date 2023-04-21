@@ -1,10 +1,11 @@
-import {FC, useEffect, useRef, useState} from "react";
-import {Button, Space, theme, Tooltip} from "antd"
+import React, {FC, useEffect, useRef, useState} from "react";
+import {Button, Dropdown, MenuProps, Space, theme, Tooltip} from "antd"
 import {Icon, styled} from "umi";
 import {css} from "@@/exports";
 import {useControllableValue} from "ahooks";
 import useHotkeys from "@/components/chat-input/useHotkeys";
 import UserList from "@/components/chat-input/UserList";
+import {SmileOutlined} from "@ant-design/icons";
 
 const {useToken}=theme
 type ChatInputType = {
@@ -15,6 +16,7 @@ type ChatInputType = {
 }
 const ChatInput:FC<ChatInputType> = (props) => {
     const {value,rawHtml,onChange,onChangeRawHtml}=props
+    const [open,setOpen]=useState<boolean>(false)
     const [focused, setFocused] = useState<boolean>(false);
     const [text,setText]=useControllableValue<string>(props,{
         defaultValue:""
@@ -41,18 +43,19 @@ const ChatInput:FC<ChatInputType> = (props) => {
         console.log("发送")
     }
     const checkAt=async ()=>{
+        setOpen(true)
         // 获取光标位置
-        const selection = window.getSelection();
-        const range = selection.getRangeAt(0);
-        const { startContainer, startOffset } = range;
-        const userSelect = document.getElementById("user-select");
-        const position=getCursorPosition()
-        console.log("position:",position)
-        if (position){
-            userSelect.style.display = "block";
-            userSelect.style.left = `${position.x}px`;
-            userSelect.style.top = `${position.y}px`;
-        }
+        // const selection = window.getSelection();
+        // const range = selection.getRangeAt(0);
+        // const { startContainer, startOffset } = range;
+        // const userSelect = document.getElementById("user-select");
+        // const position=getCursorPosition()
+        // console.log("position:",position)
+        // if (position){
+        //     userSelect.style.display = "block";
+        //     userSelect.style.left = `${position.x}px`;
+        //     userSelect.style.top = `${position.y}px`;
+        // }
     }
     const getCursorPosition=():{x:number,y:number}|null=>{
         const inputField = document.getElementById("msg-input");
@@ -123,7 +126,40 @@ const ChatInput:FC<ChatInputType> = (props) => {
     //             selection.addRange(newRange);
     //         }
     //     }
-
+    const items: MenuProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+                    1st menu item
+                </a>
+            ),
+        },
+        {
+            key: '2',
+            label: (
+                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+                    2nd menu item (disabled)
+                </a>
+            ),
+            icon: <SmileOutlined />,
+            disabled: true,
+        },
+        {
+            key: '3',
+            label: (
+                <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+                    3rd menu item (disabled)
+                </a>
+            ),
+            disabled: true,
+        },
+        {
+            key: '4',
+            danger: true,
+            label: 'a danger item',
+        },
+    ];
     return(
         <StyledChatInput
             tabIndex={1}
@@ -133,7 +169,6 @@ const ChatInput:FC<ChatInputType> = (props) => {
             $colorPrimaryHover={colorPrimaryHover}
             $colorBorder={colorBorder}
             $isFocused={focused}
-
             style={{
                 borderRadius:borderRadius,
                 fontSize:fontSize,
@@ -143,24 +178,31 @@ const ChatInput:FC<ChatInputType> = (props) => {
             }}
 
         >
-            <div
-                ref={ref}
-                id={"msg-input"}
-                className={'chat-input'}
-                contentEditable={true}
-                onKeyDown={(e)=>{
-                    const { key, shiftKey } = e;
-                    if (e.key === "@") {
-                       checkAt()
-                    }
+            <Dropdown
+                menu={{ items }}
+                onOpenChange={(_open)=>{
+                    console.log(444,_open)
                 }}
-                onInput={e => {
-                    setHtml?.(e.currentTarget.innerHTML)
-                    setText?.(e.currentTarget.textContent)
-                }}
-                onFocus={()=>setFocused(true)}
-                onBlur={()=>setFocused(false)}
-                dangerouslySetInnerHTML={{__html:rawHtml}} />
+                open={open}>
+                <div
+                    ref={ref}
+                    id={"msg-input"}
+                    className={'chat-input'}
+                    contentEditable={true}
+                    onKeyDown={(e)=>{
+                        const { key, shiftKey } = e;
+                        if (e.key === "@") {
+                           checkAt()
+                        }
+                    }}
+                    onInput={e => {
+                        setHtml?.(e.currentTarget.innerHTML)
+                        setText?.(e.currentTarget.textContent)
+                    }}
+                    onFocus={()=>setFocused(true)}
+                    onBlur={()=>setFocused(false)}
+                    dangerouslySetInnerHTML={{__html:rawHtml}} />
+            </Dropdown>
             <div className={'actions-btns'}>
                 <Space >
                     <Tooltip title={"发送(Shift+Enter)"}>
@@ -168,7 +210,6 @@ const ChatInput:FC<ChatInputType> = (props) => {
                     </Tooltip>
                 </Space>
             </div>
-            <UserList id={'user-select'}/>
         </StyledChatInput>
     )
 }
