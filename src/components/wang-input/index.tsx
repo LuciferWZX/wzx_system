@@ -3,19 +3,25 @@ import '@wangeditor/editor/dist/css/style.css'
 import { Editor } from '@wangeditor/editor-for-react'
 import { IDomEditor, IEditorConfig} from '@wangeditor/editor'
 import {styled} from "umi";
-import {Avatar, Dropdown, MenuProps, Space, theme,Typography} from "antd";
+import {Avatar, Button, Dropdown, MenuProps, Space, theme, Tooltip, Typography} from "antd";
 import hotkeys from "hotkeys-js";
 import {position} from "caret-pos";
 import {Contact} from "@/types/friends/Contact";
 import {withTag} from "@/components/wang-input/plugin";
+import {Icon} from "@@/exports";
+import {useLatest} from "ahooks";
+import {MessageInstance} from "antd/es/message/interface";
 const {useToken}=theme
 const {Text}=Typography
 type WangInputType = {
-    recommends:Contact[]
+    recommends:Contact[],
+    messageInstance:MessageInstance
+    className?:string
+    sendMsg?:(text:string,html:string,reminders:number[])=>Promise<any>
 }
 
 const WangInput:FC<WangInputType> = (props) => {
-    const {recommends}=props
+    const {recommends,className,sendMsg,messageInstance}=props
     const {token:{
         borderRadius,
         colorBgContainer,
@@ -30,9 +36,11 @@ const WangInput:FC<WangInputType> = (props) => {
     }}=useToken()
     const AT = "shift+2"
     // editor 实例
-    const [editor, setEditor] = useState<IDomEditor | null>(null)
+    const [_editor, setEditor] = useState<IDomEditor | null>(null)
+    const editor=useLatest(_editor).current
     // 编辑器内容
     const [html, setHtml] = useState('')
+    const [text, setText] = useState('')
     // 编辑器配置
     const editorConfig: Partial<IEditorConfig> = {    // TS 语法
         placeholder: '请输入内容...',
@@ -42,13 +50,14 @@ const WangInput:FC<WangInputType> = (props) => {
             const target = event.target
             return (target as HTMLDivElement).isContentEditable
         }
-        hotkeys(AT,()=>{
+        hotkeys(AT,(keyboardEvent)=>{
             handleAT()
         })
         return ()=>{
             hotkeys.unbind(AT)
         }
     },[])
+
     // 及时销毁 editor ，重要！
     useEffect(() => {
 
@@ -59,21 +68,43 @@ const WangInput:FC<WangInputType> = (props) => {
 
         }
     }, [editor])
+    const validateMsg = ()=>{
+        const isEmpty = text.trim().replace(/[\n\r]/g, "") === "";
+        if (isEmpty){
+            return false
+        }
+        return true
+    }
+    const clickToSend=async ()=>{
+        if (!validateMsg()){
+            messageInstance.warning({content:"内容不能为空！",key:"msg_error"})
+            return
+        }
+       const tagsElements = document.querySelectorAll('*[data-user-id]');
+        let ids:number[]=[]
+        tagsElements.forEach(ele=>{
+            const id = ele.getAttribute("data-user-id")
+            ids.push(parseInt(id))
+        })
+        await sendMsg?.(text,html,ids)
+        setHtml("")
+        setText("")
+    }
     const handleAT=()=>{
-        const dom = document.querySelector("#w-e-textarea-1")
-
+        const dom = document.querySelector('*[data-slate-editor]')
         const pos = position(dom);
-        console.log(111,pos)
         const {left,top}=pos
         const userSelectedDom = document.getElementById("user-select")
-
-        userSelectedDom.style.display = "unset"
+        showDropdown(true)
         userSelectedDom.style.left = `${left}px`
         userSelectedDom.style.top = `${top}px`
-
+    }
+    const showDropdown=(visible:boolean)=>{
+        const userSelectedDom = document.getElementById("user-select")
+        userSelectedDom.style.display = visible === true?`unset`:"none"
     }
     const selectRecommend=(key:string)=>{
-        console.log(1111,key)
+        showDropdown(false)
     }
     const items: MenuProps['items'] = recommends.map(contact=>{
         return {
@@ -88,13 +119,13 @@ const WangInput:FC<WangInputType> = (props) => {
             )
         }
     });
-
     return(
         <StyledWangInput
             $placeholderColor={colorTextPlaceholder}
             $controlOutline={controlOutline}
             $colorPrimaryHover={colorPrimaryHover}
             $colorBorder={colorBorder}
+            className={className}
             style={{
                 borderRadius:borderRadius,
                 fontSize:fontSize,
@@ -111,23 +142,19 @@ const WangInput:FC<WangInputType> = (props) => {
                     setEditor(withTagEditor)
                 }}
                 onChange={editor => {
-                    // const text = editor.getText()
-                    // if (editor.selection){
-                    //     // 获取当前光标位置
-                    //     const basePoint = editor.selection.anchor
-                    //     const content =text.substring(0, basePoint.offset)
-                    //     let lastChar = content[basePoint.offset-1]
-                    //     //如果前面的光标是@的话出现弹窗
-                    //     if (lastChar === "@") {
-                    //
-                    //     }
-                    //     setHtml(editor.getHtml())
-                    // }
-
+                    editor.restoreSelection()
                     setHtml(editor.getHtml())
+                    setText(editor.getText())
                 }}
                 mode="simple"
             />
+            <div style={{textAlign:"right"}}>
+                <Space >
+                    <Tooltip title={"发送(Shift+Enter)"}>
+                        <Button onClick={clickToSend} disabled={!validateMsg()} style={{color:!validateMsg()?colorTextDisabled:colorPrimaryHover}}  type={"text"} icon={<Icon icon={"bi:send-fill"} className={"anticon"}/>}></Button>
+                    </Tooltip>
+                </Space>
+            </div>
             <div id={'user-select'} className={'user-select-model'} >
                 <Dropdown
                     menu={{
@@ -139,12 +166,12 @@ const WangInput:FC<WangInputType> = (props) => {
                             const item = recommends.find(rec=>rec.id.toString() === key)
                             const node = {
                                 type: 'tag',
-                                src:item.friendInfo.avatar,
                                 label:item.friendInfo.nickname,
                                 value:item.id,
                                 children: [{text:""}]
                             }
                             editor.restoreSelection()
+                            editor.deleteBackward("character")
                             editor.insertNode(node)
                             selectRecommend(key)
                         }
@@ -167,11 +194,12 @@ const StyledWangInput = styled.div<{
   transition-duration: 0.4s;
   outline-color: ${({$controlOutline})=>$controlOutline} ;
   border: 1px solid ${({$colorBorder})=>$colorBorder};
-  max-height: 300px;
+  //max-height: 300px;
   position: relative;
   font-size: 40px;
   .editor{
-    
+    max-height: 200px;
+    overflow: auto;
     [data-slate-editor] p{
       margin: 0;
     }
