@@ -6,7 +6,7 @@ function renderTagElement(elem: SlateElement, children: VNode[] | null, editor: 
     const {label,value}=(elem as any) as TagElement
     // 当前节点是否选中
     const selected = DomEditor.isNodeSelected(editor, elem)
-    const tagNode = (h(
+    const tagNode = h(
         'span',{
             dataset:{
                 userId:value
@@ -25,26 +25,17 @@ function renderTagElement(elem: SlateElement, children: VNode[] | null, editor: 
         }
         },
         [`@${label}`]
-    ))
-
+    )
 
     return tagNode
 
 }
 function tagToHtml(elem: SlateElement, childrenHtml: string):string{
     // 获取附件元素的数据
-    const { src,label,value } = elem as any
+    const {label,value} = elem as any
 
     // 生成 HTML 代码
-    const html = `<span
-        data-w-e-type="tag"
-        data-w-e-is-void
-        data-w-e-is-inline
-        data-src="${src}"
-      
-        data-label="${label}"
-        data-value="${value}"
-    >${label}</span>`
+    const html = `<span data-w-e-type="tag"data-w-e-is-voiddata-w-e-is-inline data-label="${label}" data-value="${value}">${label}</span>`
     return html
 }
 export const renderTagConf = {
