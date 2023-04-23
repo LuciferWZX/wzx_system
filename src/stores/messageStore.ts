@@ -2,6 +2,8 @@ import {Conversation, ConversationMode} from "@/types/message/Conversation";
 import {create} from "zustand";
 import {devtools, subscribeWithSelector} from "zustand/middleware";
 import {createSelectors} from "@/types/WithSelectors";
+import {MessageType} from "@/types/message/Messaget";
+import {sendOneToOneMsg} from "@/services/api/message";
 
 type MessageStoreType = {
     orgConversations:Conversation[], //原始的所有的聊天列表
@@ -11,6 +13,12 @@ type MessageStoreType = {
     groupId:number|null, //当前正在聊天的group的id
 }
 type Action = {
+    sendOneToOneMsg:(params: {
+        fid: number;
+        reminder: boolean;
+        type: MessageType;
+        content:string;
+    })=>Promise<void>
     clear:()=>void
 }
 const initialState:MessageStoreType = {
@@ -25,6 +33,10 @@ const useMessageStoreBase = create(
         devtools<MessageStoreType & Action>(
             (set,get)=>({
                 ...initialState,
+                sendOneToOneMsg:async (params)=>{
+                    const data =await sendOneToOneMsg(params)
+                    console.log(1111,data)
+                },
                 clear:()=>{
                     set(()=>initialState,true)
                 }
