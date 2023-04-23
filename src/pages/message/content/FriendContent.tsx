@@ -1,27 +1,24 @@
 import {FC} from "react";
-import {WangInput} from "@/components";
-import {useUserStore} from "@/stores";
 import {styled} from "umi";
-import {useOutletContext} from "@@/exports";
-import {OutletProps} from "@/layouts";
-
+import FriendMessageList from "@/pages/message/content/FriendMessageList";
+import MessageInput from "@/pages/message/content/MessageInput";
+import {theme} from 'antd'
+import {useMessageStore} from "@/stores/messageStore";
+import {shallow} from "zustand/shallow";
+const {useToken}=theme
 const FriendContent:FC = () => {
-    const {message}=useOutletContext<OutletProps>()
-    const {contacts} = useUserStore(state => ({
-        contacts:state.contacts
-    }))
-
-
-    const sendMsg=async (text,html,reminders)=>{
-        console.log({
-            text,html,reminders
-        })
+    const {token:{colorBgLayout}}=useToken()
+    const friendInfo = useMessageStore(state => state.friendInfo,shallow)
+    if (!friendInfo){
+        return (
+            <div>Loading</div>
+        )
     }
     return(
-        <StyledFriendMessageContent>
-            friendContent
+        <StyledFriendMessageContent style={{backgroundColor:colorBgLayout}}>
+            <FriendMessageList friendInfo={friendInfo} />
             <div className={'input-area'}>
-                <WangInput messageInstance={message} sendMsg={sendMsg} recommends={contacts} />
+                <MessageInput/>
             </div>
         </StyledFriendMessageContent>
     )
@@ -30,14 +27,10 @@ const StyledFriendMessageContent = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 0 10px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
   .input-area{
-    position: absolute;
-    width: 100%;
-    padding: 10px;
-    bottom: 10px;
-    left: 0;
+    padding-bottom: 10px;
   }
 `
 export default FriendContent

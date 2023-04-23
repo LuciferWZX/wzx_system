@@ -29,7 +29,9 @@ const Header:FC = () => {
         await delay(1000)
         instance.destroy()
         history.replace("/auth/accounts")
-        clear()
+        setTimeout(()=>{
+            clear()
+        },400)
     }
     const items: MenuProps['items'] = [
         {

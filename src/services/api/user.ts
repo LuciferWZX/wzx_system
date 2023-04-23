@@ -1,6 +1,6 @@
 import {APIResponseType} from "@/types/APIResponseType";
 import request from "@/services/request";
-import {ContactUser} from "@/types/User";
+import {ContactUser, User} from "@/types/User";
 import {ContactGroup} from "@/types/ContactGroup";
 
 let queryUsersController:AbortController
@@ -15,6 +15,13 @@ export const queryUsers = async (params:{queryStr:string}):Promise<APIResponseTy
         method:"POST",
         signal,
         data:params
+    })
+}
+export const queryFriendInfo = async (params:{fid:number}):Promise<APIResponseType<User>> =>{
+    const url = `/api/v1/users/friend-info`
+    return request(url,{
+        method:"GET",
+        params:params
     })
 }
 /**

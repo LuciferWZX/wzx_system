@@ -11,6 +11,7 @@ import {withTag} from "@/components/wang-input/plugin";
 import {Icon} from "@@/exports";
 import {useLatest} from "ahooks";
 import {MessageInstance} from "antd/es/message/interface";
+import {useMessageStore} from "@/stores/messageStore";
 const {useToken}=theme
 const {Text}=Typography
 type WangInputType = {
@@ -38,6 +39,7 @@ const WangInput:FC<WangInputType> = (props) => {
     // editor 实例
     const [_editor, setEditor] = useState<IDomEditor | null>(null)
     const editor=useLatest(_editor).current
+
     // 编辑器内容
     const [html, setHtml] = useState('')
     const [text, setText] = useState('')
@@ -60,11 +62,18 @@ const WangInput:FC<WangInputType> = (props) => {
 
     // 及时销毁 editor ，重要！
     useEffect(() => {
-
+        useMessageStore.setState({
+            inputEditor:editor
+        })
         return () => {
             if (editor == null) return
+            useMessageStore.getState().inputEditor.destroy()
+            useMessageStore.setState({
+                inputEditor:null
+            })
             editor.destroy()
             setEditor(null)
+
 
         }
     }, [editor])
@@ -91,13 +100,15 @@ const WangInput:FC<WangInputType> = (props) => {
         setText("")
     }
     const handleAT=()=>{
-        const dom = document.querySelector('*[data-slate-editor]')
-        const pos = position(dom);
+        // const dom = useMessageStore.use.inputEditor().getSelectionPosition()
+        // console.log(11,dom)
+        const pos = useMessageStore.getState().inputEditor.getSelectionPosition();
         const {left,top}=pos
+        console.log(left)
         const userSelectedDom = document.getElementById("user-select")
         showDropdown(true)
-        userSelectedDom.style.left = `${left}px`
-        userSelectedDom.style.top = `${top}px`
+        userSelectedDom.style.left = `${left}`
+        userSelectedDom.style.top = `${top}`
     }
     const showDropdown=(visible:boolean)=>{
         const userSelectedDom = document.getElementById("user-select")
@@ -134,7 +145,7 @@ const WangInput:FC<WangInputType> = (props) => {
                 lineHeight:lineHeight
             }}>
             <Editor
-                className={'editor'}
+                className={'my-editor-input'}
                 defaultConfig={editorConfig}
                 value={html}
                 onCreated={(editor)=>{
@@ -142,7 +153,7 @@ const WangInput:FC<WangInputType> = (props) => {
                     setEditor(withTagEditor)
                 }}
                 onChange={editor => {
-                    editor.restoreSelection()
+                    // editor.restoreSelection()
                     setHtml(editor.getHtml())
                     setText(editor.getText())
                 }}

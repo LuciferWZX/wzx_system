@@ -94,8 +94,6 @@ const NewFriendsListItem:FC<NewFriendsListItemType> = ({record})=>{
     const selectId = useContactStore(state => state.selectId,shallow)
 
     useLayoutEffect(()=>{
-        console.log(11111,record)
-        console.log(22222,uid)
         setFriendInfo(record.friendInfo)
         if (record.creatorId === uid){
             //我是发送者

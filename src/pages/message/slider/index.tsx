@@ -10,7 +10,6 @@ const {useToken}=theme
 const MessageSlider:FC = () => {
     const {token:{colorBgContainer}}=useToken()
     const conversations = useMessageStore(state => state.conversations,shallow)
-    console.log(111,conversations)
     return(
         <StyledMessageSlider style={{backgroundColor:colorBgContainer}}>
             <HeaderBar/>
