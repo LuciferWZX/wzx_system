@@ -8,6 +8,7 @@ import {ResCode} from "@/types/APIResponseType";
 import {User} from "@/types/User";
 import {queryFriendInfo} from "@/services/api/user";
 import {IDomEditor} from "@wangeditor/editor";
+// @ts-ignore
 import computed from "zustand-computed"
 type MessageStoreType = {
     orgConversations:Conversation[], //原始的所有的聊天列表
@@ -54,7 +55,6 @@ const computedState=(state:MessageStoreType & Action):ComputedStore=>{
         pageSize:20,
         messages:[]
     }
-    console.log(11112222,state.msgMap.get(state.fid) ??emptyValue)
     return {
         currentMessageData:state.msgMap.get(state.fid) ??emptyValue
     }

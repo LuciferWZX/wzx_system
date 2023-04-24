@@ -5,6 +5,7 @@ import MessageInput from "@/pages/message/content/MessageInput";
 import {theme} from 'antd'
 import {useMessageStore} from "@/stores/messageStore";
 import {shallow} from "zustand/shallow";
+import TextInput from "@/pages/message/content/TextInput";
 const {useToken}=theme
 const FriendContent:FC = () => {
     const {token:{colorBgLayout}}=useToken()
@@ -18,7 +19,7 @@ const FriendContent:FC = () => {
         <StyledFriendMessageContent style={{backgroundColor:colorBgLayout}}>
             <FriendMessageList friendInfo={friendInfo} />
             <div className={'input-area'}>
-                <MessageInput/>
+                <TextInput/>
             </div>
         </StyledFriendMessageContent>
     )
@@ -30,7 +31,6 @@ const StyledFriendMessageContent = styled.div`
   display: flex;
   flex-direction: column;
   .input-area{
-    padding-bottom: 10px;
   }
 `
 export default FriendContent

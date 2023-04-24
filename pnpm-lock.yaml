@@ -29,6 +29,7 @@ specifiers:
   editor: link:@types/@wangeditor/editor
   framer-motion: ^10.10.0
   hotkeys-js: ^3.10.2
+  idb: ^7.1.1
   mac-scrollbar: ^0.10.6
   react-lottie-player: ^1.5.4
   react-resizable-panels: ^0.0.39
@@ -53,6 +54,7 @@ dependencies:
   dayjs: 1.11.7
   framer-motion: 10.10.0
   hotkeys-js: 3.10.2
+  idb: 7.1.1
   mac-scrollbar: 0.10.6
   react-lottie-player: 1.5.4
   react-resizable-panels: 0.0.39
@@ -6364,6 +6366,10 @@ packages:
       postcss: ^8.1.0
     dependencies:
       postcss: 8.4.21
+    dev: false
+
+  /idb/7.1.1:
+    resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
     dev: false
 
   /identity-obj-proxy/3.0.0:

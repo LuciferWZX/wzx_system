@@ -1,21 +1,30 @@
-import React, {FC, useEffect, useRef, useState} from "react";
-import {Button, Dropdown, MenuProps, Space, theme, Tooltip} from "antd"
+import React, {FC, useEffect, useState} from "react";
+import {Avatar, Button, Dropdown, MenuProps, Space, theme, Tooltip,Typography} from "antd"
 import {Icon, styled} from "umi";
 import {css} from "@@/exports";
 import {useControllableValue} from "ahooks";
 import useHotkeys from "@/components/chat-input/useHotkeys";
-import UserList from "@/components/chat-input/UserList";
-import {SmileOutlined} from "@ant-design/icons";
+import {Pos, position} from "caret-pos";
+import {Contact} from "@/types/friends/Contact";
+import {MessageInstance} from "antd/es/message/interface";
+import {renderToStaticMarkup} from "react-dom/server";
+import {render} from "react-dom";
 
 const {useToken}=theme
+const {Text}=Typography
 type ChatInputType = {
     value?:string
     rawHtml?:string
     onChange?:(text:string)=>void
     onChangeRawHtml?:(rawHtml:string)=>void
+    recommends:Contact[],
+    messageInstance:MessageInstance
+    className?:string
+    sendMsg?:(text:string,html:string,reminders:number[])=>Promise<any>
 }
 const ChatInput:FC<ChatInputType> = (props) => {
-    const {value,rawHtml,onChange,onChangeRawHtml}=props
+    const {value,rawHtml,onChange,onChangeRawHtml
+    ,recommends}=props
     const [open,setOpen]=useState<boolean>(false)
     const [focused, setFocused] = useState<boolean>(false);
     const [text,setText]=useControllableValue<string>(props,{
@@ -26,7 +35,7 @@ const ChatInput:FC<ChatInputType> = (props) => {
         valuePropName:"rawHtml",
         trigger:"onChangeRawHtml"
     })
-    const ref = useRef<HTMLDivElement>(null)
+    const [curPos, setPos] = useState<Pos>(null);
     const {token:{
         borderRadius,
         colorBgContainer,
@@ -42,20 +51,32 @@ const ChatInput:FC<ChatInputType> = (props) => {
     const sendMessage=async ()=> {
         console.log("发送")
     }
+    useEffect(()=>  {
+        const selectionChanged=()=>{
+            updatePos()
+        }
+        const input = document.getElementById("msg-input");
+        input.addEventListener("selectionchange",selectionChanged)
+        return ()=>{
+            input.removeEventListener("selectionchange",selectionChanged)
+        }
+    },[])
     const checkAt=async ()=>{
         setOpen(true)
+        const dom = document.querySelector("#msg-input")
+        const {left,top} = position(dom)
         // 获取光标位置
         // const selection = window.getSelection();
         // const range = selection.getRangeAt(0);
         // const { startContainer, startOffset } = range;
-        // const userSelect = document.getElementById("user-select");
-        // const position=getCursorPosition()
-        // console.log("position:",position)
-        // if (position){
-        //     userSelect.style.display = "block";
-        //     userSelect.style.left = `${position.x}px`;
-        //     userSelect.style.top = `${position.y}px`;
-        // }
+        const userSelect = document.getElementById("user-selector");
+
+        console.log("position:",left,top)
+        if (position){
+            userSelect.style.display = "block";
+            userSelect.style.left = `${left}px`;
+            userSelect.style.top = `${top}px`;
+        }
     }
     const getCursorPosition=():{x:number,y:number}|null=>{
         const inputField = document.getElementById("msg-input");
@@ -74,92 +95,29 @@ const ChatInput:FC<ChatInputType> = (props) => {
         sendMsg:sendMessage,
     })
 
-    //     function switchLine(){
-    //         // 获取可编辑元素
-    //         const editable = document.querySelector('[contentEditable=true]');
-    //
-    // // 获取选中的范围
-    //         const selection = document.getSelection();
-    //         const range = selection.getRangeAt(0);
-    //
-    // // 获取选中范围的起始节点和偏移量
-    //         const startContainer = range.startContainer;
-    //         const startOffset = range.startOffset;
-    //
-    //         console.log(1,startContainer.nodeType)
-    //         console.log(2,Node.TEXT_NODE)
-    //     // 如果起始节点是文本节点，则在该节点后面插入一个换行符
-    //         if (startContainer.nodeType === Node.TEXT_NODE) {
-    //             const textNode:any= startContainer;
-    //             // 将文本节点拆分成两个节点
-    //             const newNode = textNode.splitText(startOffset);
-    //
-    //             // 在新节点前面插入一个换行符
-    //             const brNode = document.createElement('br');
-    //             editable.insertBefore(brNode, newNode);
-    //
-    //             // 将光标移到新节点之前
-    //             const newRange = document.createRange();
-    //             newRange.setStart(newNode, 0);
-    //             newRange.setEnd(newNode, 0);
-    //             selection.removeAllRanges();
-    //             selection.addRange(newRange);
-    //         }
-    //         // 如果起始节点是元素节点，则在该节点下的指定偏移量后插入一个文本节点和一个换行符
-    //         if (startContainer.nodeType === Node.ELEMENT_NODE) {
-    //             // 获取指定偏移量后面的第一个子节点
-    //             const nextNode = startContainer.childNodes[startOffset];
-    //
-    //             // 创建一个包含空格的文本节点和一个换行符节点
-    //             const textNode = document.createTextNode('\u00A0'); // 这里是Unicode编码的空格字符
-    //             const brNode = document.createElement('br');
-    //
-    //             // 在元素节点中插入文本节点和换行符节点
-    //             startContainer.insertBefore(brNode, nextNode);
-    //             startContainer.insertBefore(textNode, nextNode);
-    //
-    //             // 将光标移到新节点之前
-    //             const newRange = document.createRange();
-    //             newRange.setStart(textNode, 0);
-    //             newRange.setEnd(textNode, 0);
-    //             selection.removeAllRanges();
-    //             selection.addRange(newRange);
-    //         }
-    //     }
-    const items: MenuProps['items'] = [
-        {
-            key: '1',
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    1st menu item
-                </a>
-            ),
-        },
-        {
-            key: '2',
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                    2nd menu item (disabled)
-                </a>
-            ),
-            icon: <SmileOutlined />,
-            disabled: true,
-        },
-        {
-            key: '3',
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                    3rd menu item (disabled)
-                </a>
-            ),
-            disabled: true,
-        },
-        {
-            key: '4',
-            danger: true,
-            label: 'a danger item',
-        },
-    ];
+    const items: MenuProps['items'] = recommends.map(contact=>{
+        return {
+            key:contact.id,
+            label:(
+                <Space>
+                    <Avatar src={contact.friendInfo.avatar} />
+                    <Text strong={true}>
+                        {contact.friendInfo.nickname}
+                    </Text>
+                </Space>
+            )
+        }
+    });
+    const updatePos=()=>{
+        const input = document.querySelector("#msg-input")
+        const pos = position(input)
+        setPos(pos)
+    }
+    const setCursor=(pos:number)=>{
+        const input = document.querySelector("#msg-input")
+        position(input,pos)
+    }
+    console.log(99,curPos)
     return(
         <StyledChatInput
             tabIndex={1}
@@ -178,31 +136,61 @@ const ChatInput:FC<ChatInputType> = (props) => {
             }}
 
         >
-            <Dropdown
-                menu={{ items }}
-                onOpenChange={(_open)=>{
-                    console.log(444,_open)
+            <div
+                id={"msg-input"}
+                className={'chat-input'}
+                contentEditable={true}
+                suppressContentEditableWarning
+                onKeyDown={(e)=>{
+                    const { key, shiftKey } = e;
+                    if (e.key === "@") {
+                        checkAt()
+                    }
                 }}
-                open={open}>
-                <div
-                    ref={ref}
-                    id={"msg-input"}
-                    className={'chat-input'}
-                    contentEditable={true}
-                    onKeyDown={(e)=>{
-                        const { key, shiftKey } = e;
-                        if (e.key === "@") {
-                           checkAt()
-                        }
+                onInput={e => {
+                    updatePos()
+                    setHtml?.(e.currentTarget.innerHTML)
+                    setText?.(e.currentTarget.textContent)
+                }}
+                onFocus={()=>setFocused(true)}
+                onBlur={()=>setFocused(false)}
+            >
+                <Button contentEditable={false}>xxx</Button>
+            </div>
+            <div className={'user-selector-modal'} id={'user-selector'}>
+                <Dropdown
+                    menu={{
+                        items ,
+                        onClick:({key})=> {
+                            setCursor(curPos.pos)
+                            const selection = window.getSelection();
+                            if (selection.rangeCount === 0) return;
+
+                            const range = selection.getRangeAt(0);
+                            range.deleteContents();
+
+                            const reactNode = document.createElement('div');
+                            render(<Button contentEditable={false}>xxxx</Button>, reactNode);
+
+                            const fragment = document.createDocumentFragment();
+                            const children = reactNode.children;
+                            for (let i = 0; i < children.length; i++) {
+                                fragment.appendChild(children[i].cloneNode(true));
+                            }
+
+                            range.insertNode(fragment);
+                            selection.removeAllRanges();
+                            selection.addRange(range);
+                        },
+                        style:{
+                            minWidth:180
+                        },
                     }}
-                    onInput={e => {
-                        setHtml?.(e.currentTarget.innerHTML)
-                        setText?.(e.currentTarget.textContent)
-                    }}
-                    onFocus={()=>setFocused(true)}
-                    onBlur={()=>setFocused(false)}
-                    dangerouslySetInnerHTML={{__html:rawHtml}} />
-            </Dropdown>
+                    getPopupContainer={triggerNode => triggerNode.parentElement}
+                    open={open}>
+                    <span style={{height:2,width:2}} />
+                </Dropdown>
+            </div>
             <div className={'actions-btns'}>
                 <Space >
                     <Tooltip title={"发送(Shift+Enter)"}>
@@ -246,6 +234,12 @@ const StyledChatInput = styled.div<{
   }
   .actions-btns{
     text-align: right;
+  }
+  .user-selector-modal{
+    position: absolute;
+    background-color: red;
+    left: 0;
+    top: 0;
   }
 `
 export default ChatInput

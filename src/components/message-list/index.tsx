@@ -4,6 +4,7 @@ import {styled} from "umi";
 import {Avatar, Space,Typography} from "antd";
 import {User} from "@/types/User";
 import EditDisplay from "@/components/message-list/EditDisplay";
+import MessageBubble from "@/components/message-list/MessageBubble";
 
 
 const {Text}=Typography
@@ -66,12 +67,13 @@ const LeftUser:FC<MessageListItemType> = (props) =>{
     const {message,avatar,username}=props
     return(
         <StyledMessageItem style={{textAlign:"left"}}>
-            <Space>
+            <Space align={"start"}>
                 <Avatar size={50} src={avatar} />
                 <div>
                     <Text strong={true} style={{fontSize:16}}>{username}</Text>
                     <div className={'left-content'}>
-                        <EditDisplay  html={message}/>
+                        <MessageBubble content={message} />
+
                     </div>
                 </div>
             </Space>
@@ -82,11 +84,11 @@ const RightUser:FC<MessageListItemType> = (props) =>{
     const {message,avatar,username}=props
     return(
         <StyledMessageItem style={{textAlign:"right"}}>
-            <Space>
+            <Space align={"start"}>
                 <div>
                     <Text strong={true} style={{fontSize:16}}>{username}</Text>
                     <div className={'right-content'} >
-                        <EditDisplay  html={message}/>
+                        <MessageBubble content={message} />
                     </div>
                 </div>
                 <Avatar size={50} src={avatar} />
