@@ -11,7 +11,7 @@ import {renderToStaticMarkup} from "react-dom/server";
 import {render} from "react-dom";
 
 const {useToken}=theme
-const {Text}=Typography
+const {Text,Link}=Typography
 type ChatInputType = {
     value?:string
     rawHtml?:string
@@ -118,6 +118,43 @@ const ChatInput:FC<ChatInputType> = (props) => {
         position(input,pos)
     }
     console.log(99,curPos)
+    const removeAt=()=>{
+        const element = document.getElementById("msg-input");
+        // 获取光标所在位置
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        const cursorPosition = range.startOffset;
+        // 获取光标前面的文本
+        const text = element.textContent.slice(0, cursorPosition);
+        // 如果文本以 "@" 开头，则删除该字符并将光标往前移动一个字符
+        if (text.endsWith("@")) {
+            range.setStart(range.startContainer, cursorPosition - 1);
+            range.deleteContents();
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+    }
+    const mentionLink=(value:string,label) => <Link strong={true} contentEditable={false} data-value={value}>@{label}</Link>
+    const insertNode=(key:string)=>{
+        const selection = window.getSelection();
+        if (selection.rangeCount === 0) return;
+
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
+        const reactNode = document.createElement('div');
+        const info = recommends.find(recommend=>recommend.id.toString()===key)
+        render(mentionLink(info.id.toString(),info.friendInfo.username), reactNode);
+
+        const fragment = document.createDocumentFragment();
+        const children = reactNode.children;
+        for (let i = 0; i < children.length; i++) {
+            fragment.appendChild(children[i].cloneNode(true));
+        }
+
+        range.insertNode(fragment);
+        selection.removeAllRanges();
+    }
     return(
         <StyledChatInput
             tabIndex={1}
@@ -155,7 +192,6 @@ const ChatInput:FC<ChatInputType> = (props) => {
                 onFocus={()=>setFocused(true)}
                 onBlur={()=>setFocused(false)}
             >
-                <Button contentEditable={false}>xxx</Button>
             </div>
             <div className={'user-selector-modal'} id={'user-selector'}>
                 <Dropdown
@@ -163,24 +199,10 @@ const ChatInput:FC<ChatInputType> = (props) => {
                         items ,
                         onClick:({key})=> {
                             setCursor(curPos.pos)
-                            const selection = window.getSelection();
-                            if (selection.rangeCount === 0) return;
-
-                            const range = selection.getRangeAt(0);
-                            range.deleteContents();
-
-                            const reactNode = document.createElement('div');
-                            render(<Button contentEditable={false}>xxxx</Button>, reactNode);
-
-                            const fragment = document.createDocumentFragment();
-                            const children = reactNode.children;
-                            for (let i = 0; i < children.length; i++) {
-                                fragment.appendChild(children[i].cloneNode(true));
-                            }
-
-                            range.insertNode(fragment);
-                            selection.removeAllRanges();
-                            selection.addRange(range);
+                            removeAt()
+                            insertNode(key)
+                            setOpen(false)
+                            // selection.addRange(range);
                         },
                         style:{
                             minWidth:180
