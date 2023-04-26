@@ -1,0 +1,7 @@
+{
+  "dbName": "wzx_system",
+  "version": 1,
+  "storeNames":[
+    "user-chat"
+  ]
+}
