@@ -6,9 +6,9 @@ type DatabaseStoreType={
     database:Database
 }
 type Action={}
-const {dbName,version,storeNames} =db_config
+
 const initialState:DatabaseStoreType={
-    database:new Database(dbName,version,storeNames)
+    database:new Database()
 }
 export const useDBStore=create(
     subscribeWithSelector<DatabaseStoreType & Action>(

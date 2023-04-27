@@ -8,12 +8,11 @@ import {createGlobalStyle, history} from "umi"
 import {ResCode} from "@/types/APIResponseType";
 import {useUserStore} from "@/stores";
 import {handleInitData} from "@/utils/handleInitData";
-import {Boot, IModuleConf} from "@wangeditor/editor";
-import {elemToHtmlConf, parseHtmlConf, renderTagConf} from "@/components/wang-input/renderTagElement";
 import {useDBStore} from "@/stores/databaseStore";
+import db_config from "@/idb/dbConfig.json";
 
 export const getInitialState = async ()=>{
-    useDBStore.getState().database
+    await initDatabase()
     console.log("[初始化数据：开始]")
     await initUser()
     console.log("[初始化数据：结束]")
@@ -65,6 +64,11 @@ const initUser=async ()=>{
     //初始化用户的一些数据
     await handleInitData()
 
+}
+const initDatabase=async ()=>{
+    const {dbName,version,storeNames} =db_config
+    const {database}=useDBStore.getState()
+    await database.init(dbName,version,storeNames)
 }
 
 

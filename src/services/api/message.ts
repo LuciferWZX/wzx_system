@@ -19,6 +19,7 @@ export const getMessages = async (params: {
     fid: number;
     pageSize: number;
     page: number;
+    currentTime: string;
 }):Promise<APIResponseType<{
     total:number, //总数
     pageTotal: number,//页码总数

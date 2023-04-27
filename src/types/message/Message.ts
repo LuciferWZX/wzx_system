@@ -18,6 +18,7 @@ export type Message = {
     updateDate:string
 }
 export type MessageData = {
+    currentTime?:string
     page:number
     pageSize:number
     total:number

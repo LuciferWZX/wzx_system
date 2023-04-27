@@ -3,6 +3,7 @@ import {shallow} from "zustand/shallow";
 import {useLayoutEffect} from "react";
 import {useRequest} from "ahooks";
 import {MessageData} from "@/types/message/Message";
+import dayjs from "dayjs";
 
 const useGetMessage = () => {
     const fid = useMessageStore(state => state.fid,shallow)
@@ -17,10 +18,12 @@ const useGetMessage = () => {
         }
     },[fid])
     const initMessageData=async ()=>{
+        const currentTime = dayjs().format("YYYY-MM-DD HH:mm:ss")
         await queryMessageData({
             fid,
             page:curMessageData.page,
-            pageSize:curMessageData.pageSize
+            pageSize:curMessageData.pageSize,
+            currentTime
         })
     }
     return {

@@ -1,13 +1,13 @@
 import {IDBPDatabase, openDB} from "idb";
 
 export class Database {
-    private readonly database:Promise<IDBPDatabase<unknown>>
-    constructor(dbName:string,version:number,storeNames?:string[]) {
-        this.database = openDB(dbName,version,{
+    private database:IDBPDatabase
+    async init(dbName:string,version:number,storeNames?:string[]) {
+        this.database =await openDB(dbName,version,{
             upgrade:(database)=>{
                 console.info("[初次打开数据库，开始初始化storeNames:]")
                 for (let i=0;i<storeNames.length;i++){
-                    database.createObjectStore(storeNames[i],{keyPath:'id'})
+                    database.createObjectStore(storeNames[i])
                     console.info(`[store:${storeNames[i]}]:初始化完成！`)
                 }
                 console.info(["已全部初始化完成"])
