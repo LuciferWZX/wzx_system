@@ -12,6 +12,12 @@ import {useDBStore} from "@/stores/databaseStore";
 import db_config from "@/idb/dbConfig.json";
 
 export const getInitialState = async ()=>{
+    console.log("[我使用了git submodule]")
+    console.log("[versions]:",{
+        node:window.versions.node(),
+        chrome:window.versions.chrome(),
+        electron    :window.versions.electron(),
+    })
     await initDatabase()
     console.log("[初始化数据：开始]")
     await initUser()
