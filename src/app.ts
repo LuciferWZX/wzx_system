@@ -10,6 +10,8 @@ import {useUserStore} from "@/stores";
 import {handleInitData} from "@/utils/handleInitData";
 import {useDBStore} from "@/stores/databaseStore";
 import db_config from "@/idb/dbConfig.json";
+import {WindowActionType} from "@/types/electron/WindowActionType";
+import {handleMainWin} from "@/utils/electron";
 
 export const getInitialState = async ()=>{
     console.log("[我使用了git submodule]")
@@ -22,6 +24,7 @@ export const getInitialState = async ()=>{
     console.log("[初始化数据：开始]")
     await initUser()
     console.log("[初始化数据：结束]")
+    handleMainWin(WindowActionType.show)
 }
 export const rootContainer=(container:React.ReactNode)=> {
     dayjs.locale('zh-cn'); //dayjs设置中文
@@ -55,6 +58,7 @@ const initUser=async ()=>{
     if (!token){
         console.log("[token不存在]",)
         history.replace("/auth/login")
+        handleMainWin(WindowActionType.show)
         return null
     }
     const {setState:setUserState,getState:getUserState}=useUserStore
@@ -65,6 +69,7 @@ const initUser=async ()=>{
     if (res.code!== ResCode.success){
         setUserState({user:null})
         history.replace("/auth/login")
+        handleMainWin(WindowActionType.show)
         return
     }
     //初始化用户的一些数据
